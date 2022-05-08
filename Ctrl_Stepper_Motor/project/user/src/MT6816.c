@@ -76,9 +76,9 @@ bool MT6816_ReadAngle(MT6816_Structure* mt6816_structure)
         rx[0] = MT6816_SendRead16bits(tx[0]);
         rx[1] = MT6816_SendRead16bits(tx[1]);
         uint16_t angle_raw_data = ((rx[0] & 0x00FF) << 8) | (rx[1] & 0x00FF);
-        // MT6816数据手册P21：angle_raw_data[0]为奇偶校验位, angle_raw_data[1]为磁通密度不足警告，不包含角度信息
+        // MT6816数据手册P21：angle_raw_data[0]为奇偶校验位, angle_raw_data[1]为磁通密度不足警告( 1: 磁通密度不足)，不包含角度信息
         uint8_t check = 0;
-        for (uint8_t j = 0; j < 16; ++j)
+        for (uint8_t j = 1; j < 16; ++j)
         {
             if (angle_raw_data & (0x01 << j))
             {
@@ -88,6 +88,7 @@ bool MT6816_ReadAngle(MT6816_Structure* mt6816_structure)
         if ((check & 0x01) == (angle_raw_data & 0x01))
         {
             mt6816_structure->_raw_angle = angle_raw_data;
+            mt6816_structure->_decode_angle = (angle_raw_data >> 2) * 360 / 16384;
             mt6816_structure->_no_mag_warning = ((angle_raw_data & 0x02) >> 1);
             return true;
         }

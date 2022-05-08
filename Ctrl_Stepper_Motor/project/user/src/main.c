@@ -55,15 +55,16 @@ int main(void)
     // 初始化步进电机驱动芯片PWM输出引脚，输出频率2M
     pwm_init(TIM2_PWM_CH1_A0, 20000, 4000);
     pwm_init(TIM1_PWM_CH1_A8, 20000, 4000);
-    //MT6816_Init();
+    MT6816_Init();
     interrupt_global_enable();              // 总中断最后开启
-
-   // MT6816_SetZero();
+    MT6816_SetZero();
+    MT6816_Structure data;
     while(1)
     {
+        MT6816_ReadAngle(&data);
 
         //gpio_set_level(E2, GPIO_HIGH);
-
+/*
         gpio_set_level(AP_STEP, GPIO_HIGH);
         gpio_set_level(BP_STEP, GPIO_HIGH);
         gpio_set_level(AN_STEP, GPIO_LOW);
@@ -87,7 +88,8 @@ int main(void)
         gpio_set_level(AN_STEP, GPIO_LOW);
         gpio_set_level(BN_STEP, GPIO_HIGH);
         system_delay_ms(1);
-
+*/
+        system_delay_ms(10);
         Blink();
     }
 }
