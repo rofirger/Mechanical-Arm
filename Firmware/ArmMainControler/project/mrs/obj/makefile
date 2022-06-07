@@ -54,7 +54,7 @@ all: ArmMainControler.elf secondary-outputs
 
 # 工具调用
 ArmMainControler.elf: $(OBJS) $(USER_OBJS)
-	@	@	riscv-none-embed-gcc -march=rv32imac -mabi=ilp32 -msmall-data-limit=8 -mno-save-restore -O0 -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections -fno-common -pedantic -Wunused -Wuninitialized -Wall  -g -T "D:\projects\mechanical_arm\Firmware\ArmMainControler\libraries\sdk\Ld\Link.ld" -nostartfiles -Xlinker --gc-sections -L"../" -Wl,-Map,"ArmMainControler.map" --specs=nano.specs -u _printf_float --specs=nosys.specs -o "ArmMainControler.elf" $(OBJS) $(USER_OBJS) $(LIBS)
+	@	@	riscv-none-embed-gcc -march=rv32imac -mabi=ilp32 -msmall-data-limit=8 -mno-save-restore -O0 -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections -fno-common -pedantic -Wunused -Wuninitialized -Wall  -g -T "D:\projects\mechanical_arm\Firmware\ArmMainControler\libraries\sdk\Ld\Link.ld" -nostartfiles -Xlinker --gc-sections -L"D:\projects\mechanical_arm\Firmware\ArmMainControler\NetLib" -Wl,-Map,"ArmMainControler.map" --specs=nano.specs -u _printf_float --specs=nosys.specs -o "ArmMainControler.elf" $(OBJS) $(USER_OBJS) $(LIBS)
 	@	@
 ArmMainControler.hex: ArmMainControler.elf
 	@	riscv-none-embed-objcopy -O ihex "ArmMainControler.elf"  "ArmMainControler.hex"

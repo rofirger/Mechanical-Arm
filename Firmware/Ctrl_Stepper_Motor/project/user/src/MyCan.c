@@ -6,6 +6,7 @@
  */
 
 #include "zf_common_headfile.h"
+#include "MyCan.h"
 
 /*
  * CAN1的GPIO引脚:CAN1_RX(PA11), CAN1_TX(PA12)
@@ -21,8 +22,8 @@
 #define Extended_Frame   1
 
 /* CAN Communication Mode Selection */
-#define CAN_MODE   TX_MODE
-//#define CAN_MODE   RX_MODE
+//#define CAN_MODE   TX_MODE
+#define CAN_MODE   RX_MODE
 
 /* Frame Formate Selection */
 #define Frame_Format   Standard_Frame
@@ -53,15 +54,9 @@ void CAN_Mode_Init(uint8_t tsjw, uint8_t tbs2, uint8_t tbs1, uint16_t brp, uint8
     CAN_FilterInitTypeDef CAN_FilterInitSturcture={0};
 
     // GPIO端口时钟使能
-    RCC_APB2PeriphClockCmd( RCC_APB2Periph_GPIOA, ENABLE );
+    RCC_APB2PeriphClockCmd( RCC_APB2Periph_AFIO | RCC_APB2Periph_GPIOA, ENABLE );
     // 复用外设时钟使能
     RCC_APB1PeriphClockCmd( RCC_APB1Periph_CAN1, ENABLE );
-
-    /*
-     *      RM手册P98~P102
-     * 配置重映射寄存器1(AFIO_PCFR1): [14:13]为 00 时CAN1_RX 映射到 PA11，CAN1_TX 映射到 PA12
-     * */
-    //GPIO_PinRemapConfig( ((uint32_t)0x001D0000), ENABLE);
 
     /*
      *         RM手册P92
@@ -94,12 +89,12 @@ void CAN_Mode_Init(uint8_t tsjw, uint8_t tbs2, uint8_t tbs1, uint16_t brp, uint8
 
 #if (Frame_Format == Standard_Frame)
 /* identifier/mask mode, One 32-bit filter, StdId: 0x317 */
-    CAN_FilterInitSturcture.CAN_FilterMode = CAN_FilterMode_IdMask;
-    CAN_FilterInitSturcture.CAN_FilterScale = CAN_FilterScale_32bit;
-    CAN_FilterInitSturcture.CAN_FilterIdHigh = 0x62E0;
-    CAN_FilterInitSturcture.CAN_FilterIdLow = 0;
-    CAN_FilterInitSturcture.CAN_FilterMaskIdHigh = 0xFFE0;
-    CAN_FilterInitSturcture.CAN_FilterMaskIdLow = 0x0006;
+//    CAN_FilterInitSturcture.CAN_FilterMode = CAN_FilterMode_IdMask;
+//    CAN_FilterInitSturcture.CAN_FilterScale = CAN_FilterScale_32bit;
+//    CAN_FilterInitSturcture.CAN_FilterIdHigh = 0x62E0;
+//    CAN_FilterInitSturcture.CAN_FilterIdLow = 0;
+//    CAN_FilterInitSturcture.CAN_FilterMaskIdHigh = 0xFFE0;
+//    CAN_FilterInitSturcture.CAN_FilterMaskIdLow = 0x0006;
 
 /* identifier/mask mode, Two 16-bit filters, StdId: 0x317，0x316 */
 //  CAN_FilterInitSturcture.CAN_FilterMode = CAN_FilterMode_IdMask;
@@ -118,12 +113,12 @@ void CAN_Mode_Init(uint8_t tsjw, uint8_t tbs2, uint8_t tbs1, uint16_t brp, uint8
 //  CAN_FilterInitSturcture.CAN_FilterMaskIdLow = 0;
 
 /* identifier list mode, Two 16-bit filters, StdId: 0x317,0x316,0x315,0x314 */
-//  CAN_FilterInitSturcture.CAN_FilterMode = CAN_FilterMode_IdList;
-//  CAN_FilterInitSturcture.CAN_FilterScale = CAN_FilterScale_16bit;
-//  CAN_FilterInitSturcture.CAN_FilterIdHigh = 0x62E0;
-//  CAN_FilterInitSturcture.CAN_FilterIdLow = 0x62C0;
-//  CAN_FilterInitSturcture.CAN_FilterMaskIdHigh = 0x62A0;
-//  CAN_FilterInitSturcture.CAN_FilterMaskIdLow = 0x6280;
+  CAN_FilterInitSturcture.CAN_FilterMode = CAN_FilterMode_IdList;
+  CAN_FilterInitSturcture.CAN_FilterScale = CAN_FilterScale_16bit;
+  CAN_FilterInitSturcture.CAN_FilterIdHigh = FILTER_ID_AXIS_D;
+  CAN_FilterInitSturcture.CAN_FilterIdLow = FILTER_ID_AXIS_C;
+  CAN_FilterInitSturcture.CAN_FilterMaskIdHigh = FILTER_ID_AXIS_B;
+  CAN_FilterInitSturcture.CAN_FilterMaskIdLow = FILTER_ID_AXIS_A;
 
 #elif (Frame_Format == Extended_Frame)
 /* identifier/mask mode, One 32-bit filter, ExtId: 0x12124567 */
@@ -160,7 +155,7 @@ uint8_t CAN_Send_Msg(uint8_t *msg, uint8_t len)
     CanTxMsg CanTxStructure;
 
 #if (Frame_Format == Standard_Frame)
-    CanTxStructure.StdId = 0x317;
+    CanTxStructure.StdId = MAIN_CONTROLER_FILTER_ID_A;
     CanTxStructure.IDE = CAN_Id_Standard;
 
 #elif (Frame_Format == Extended_Frame)
@@ -205,7 +200,7 @@ uint8_t CAN_Send_Msg(uint8_t *msg, uint8_t len)
  *
  * @return  CanRxStructure.DLC - Receive data length.
  */
-uint8_t CAN_Receive_Msg(uint8_t *buf )
+uint8_t CAN_Receive_Msg(uint8_t *buf)
 {
     uint8_t i;
 
@@ -218,7 +213,7 @@ uint8_t CAN_Receive_Msg(uint8_t *buf )
 
     CAN_Receive( CAN1, CAN_FIFO0, &CanRxStructure );
 
-    for( i=0; i<8; i++ )
+    for( i=0; i< CanRxStructure.DLC; i++ )
     {
         buf[i] = CanRxStructure.Data[i];
     }

@@ -18,6 +18,7 @@
 ********************************************************************************************************************/
 
 #include "zf_common_headfile.h"
+#include "WCHNET.h"
 void NMI_Handler(void)       __attribute__((interrupt("WCH-Interrupt-fast")));
 void HardFault_Handler(void) __attribute__((interrupt("WCH-Interrupt-fast")));
 
@@ -60,6 +61,21 @@ void EXTI3_IRQHandler(void) __attribute__((interrupt("WCH-Interrupt-fast")));
 void EXTI4_IRQHandler(void) __attribute__((interrupt("WCH-Interrupt-fast")));
 void EXTI9_5_IRQHandler(void) __attribute__((interrupt("WCH-Interrupt-fast")));
 void EXTI15_10_IRQHandler(void) __attribute__((interrupt("WCH-Interrupt-fast")));
+
+// 2022.5.15Ìí¼Ó£¬BY Ëæ·ç
+void ETH_IRQHandler(void) __attribute__((interrupt("WCH-Interrupt-fast")));
+
+/*********************************************************************
+ * @fn      ETH_IRQHandler
+ *
+ * @brief   This function handles ETH exception.
+ *
+ * @return  none
+ */
+void ETH_IRQHandler(void)
+{
+    WCHNET_ETHIsr();
+}
 
 void USART1_IRQHandler(void)
 {
@@ -275,12 +291,16 @@ void TIM1_UP_IRQHandler(void)
 
 void TIM2_IRQHandler(void)
 {
+    /*
     if(TIM_GetITStatus(TIM2, TIM_IT_Update) != RESET)
     {
        TIM_ClearITPendingBit(TIM2, TIM_IT_Update );
        gpio_toggle_level(E2);
 
     }
+    */
+    WCHNET_TimeIsr(WCHNETTIMERPERIOD);
+    TIM_ClearITPendingBit(TIM2, TIM_IT_Update);
 }
 
 void TIM3_IRQHandler(void)
