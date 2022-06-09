@@ -54,7 +54,7 @@ all: CarMainControler.elf secondary-outputs
 
 # 工具调用
 CarMainControler.elf: $(OBJS) $(USER_OBJS)
-	@	@	riscv-none-embed-gcc -march=rv32imac -mabi=ilp32 -msmall-data-limit=8 -mno-save-restore -O0 -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections -fno-common -pedantic -Wunused -Wuninitialized -Wall  -g -T "D:\桌面\ch32v307_core_board\CarMainControl\CarMainControl\libraries\sdk\Ld\Link.ld" -nostartfiles -Xlinker --gc-sections -L"../" -Wl,-Map,"CarMainControler.map" --specs=nano.specs -u _printf_float --specs=nosys.specs -o "CarMainControler.elf" $(OBJS) $(USER_OBJS) $(LIBS)
+	@	@	riscv-none-embed-gcc -march=rv32imac -mabi=ilp32 -msmall-data-limit=8 -mno-save-restore -O0 -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections -fno-common -pedantic -Wunused -Wuninitialized -Wall  -g -T "D:\projects\mechanical_arm\Firmware\CarMainControl\CarMainControl\libraries\sdk\Ld\Link.ld" -nostartfiles -Xlinker --gc-sections -L"../" -Wl,-Map,"CarMainControler.map" --specs=nano.specs -u _printf_float --specs=nosys.specs -o "CarMainControler.elf" $(OBJS) $(USER_OBJS) $(LIBS)
 	@	@
 CarMainControler.hex: CarMainControler.elf
 	@	riscv-none-embed-objcopy -O ihex "CarMainControler.elf"  "CarMainControler.hex"

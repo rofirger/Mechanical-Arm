@@ -16,13 +16,10 @@ float angle = 0;
 float angle_duty = 0;
 
 //编码器
-//#define ENCODER_DIR                     TIM8_ENCOEDER
-//#define ENCODER_DIR_PULSE               TIM8_CH2_ENCOEDER_C7
-//#define ENCODER_DIR_DIR                 TIM8_CH1_ENCOEDER_C6
-//
-//#define ENCODER_QUADDEC                 TIM8_ENCOEDER
-//#define ENCODER_QUADDEC_A               TIM8_CH2_ENCOEDER_C7
-//#define ENCODER_QUADDEC_B               TIM8_CH1_ENCOEDER_C6
+#define ENCODER_DIR_1                     TIM8_ENCOEDER
+#define ENCODER_DIR_PULSE_1               TIM8_CH2_ENCOEDER_C7
+#define ENCODER_DIR_DIR_1                 TIM8_CH1_ENCOEDER_C6
+
 
 void Blink(uint16_t _times)
 {
@@ -78,8 +75,7 @@ void Init()
 //       mt9v03x_init_dvp();
 
     //编码器初始化
-//       encoder_init_dir(ENCODER_DIR, ENCODER_DIR_DIR, ENCODER_DIR_PULSE);          // 初始化编码器模块与引脚 带方向增量编码器模式
-//       encoder_init_quad(ENCODER_QUADDEC, ENCODER_QUADDEC_A, ENCODER_QUADDEC_B);   // 初始化编码器模块与引脚 正交解码编码器模式
+       encoder_init_dir(ENCODER_DIR_1, ENCODER_DIR_DIR_1, ENCODER_DIR_PULSE_1);          // 初始化编码器模块与引脚 带方向增量编码器模式
 }
 
 
@@ -113,15 +109,11 @@ int main(void)
 //       Blink(1000);
 
         //编码器
-//        encoder_data = encoder_get_count(ENCODER_DIR);                          // 获取编码器计数
-//        encoder_clear_count(ENCODER_DIR);                                       // 清空编码器计数
-////        printf("ENCODER_DIR counter \t\t%d .\r\n", encoder_data);               // 输出编码器计数信息
-//        tft180_show_float(0,0,encoder_data,5,5);                              // 输出编码器计数信息
+        encoder_data = encoder_get_count(ENCODER_DIR_1);                          // 获取编码器计数
+        encoder_clear_count(ENCODER_DIR_1);                                       // 清空编码器计数
+        printf("ENCODER_DIR counter \t\t%d .\r\n", encoder_data);               // 输出编码器计数信息
+        tft180_show_float(0,0,encoder_data,5,5);                              // 输出编码器计数信息
 
-//        encoder_data = encoder_get_count(ENCODER_QUADDEC);                          // 获取编码器计数
-//        encoder_clear_count(ENCODER_QUADDEC);                                       // 清空编码器计数
-//        printf("ENCODER_DIR counter \t\t%d .\r\n", encoder_data);               // 输出编码器计数信息
-//        tft180_show_float(0,0,encoder_data,5,5);                              // 输出编码器计数信息
 
         //超声波
 //        gpio_set_level(ULTRASONIC2_TRIG, 1);
@@ -146,9 +138,9 @@ int main(void)
 //        angle_duty = angle_set_duty(angle);
 //        pwm_set_duty(PWM_STEER1,angle_duty);
 
-        tft180_show_string(0,0,"ZongJie is SB!!!");
-        system_delay_ms(500);
-        Blink(1);
+        //tft180_show_string(0,0,"ZongJie is SB!!!");
+        //system_delay_ms(500);
+        Blink(1000);
     }
 }
 

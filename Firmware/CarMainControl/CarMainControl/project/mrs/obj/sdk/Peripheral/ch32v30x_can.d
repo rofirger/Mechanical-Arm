@@ -1,17 +1,17 @@
 sdk/Peripheral/ch32v30x_can.o: \
- D:/桌面/ch32v307_core_board/CarMainControl/CarMainControl/libraries/sdk/Peripheral/ch32v30x_can.c \
- D:/桌面/ch32v307_core_board/CarMainControl/CarMainControl/libraries/sdk/Peripheral/ch32v30x_can.h \
- D:/桌面/ch32v307_core_board/CarMainControl/CarMainControl/libraries/sdk/Peripheral/ch32v30x.h \
- D:\桌面\ch32v307_core_board\CarMainControl\CarMainControl\libraries\sdk\Core/core_riscv.h \
- D:\桌面\ch32v307_core_board\CarMainControl\CarMainControl\libraries\sdk\Startup/system_ch32v30x.h \
- D:/桌面/ch32v307_core_board/CarMainControl/CarMainControl/libraries/sdk/Peripheral/ch32v30x_rcc.h
+ D:/projects/mechanical_arm/Firmware/CarMainControl/CarMainControl/libraries/sdk/Peripheral/ch32v30x_can.c \
+ D:/projects/mechanical_arm/Firmware/CarMainControl/CarMainControl/libraries/sdk/Peripheral/ch32v30x_can.h \
+ D:/projects/mechanical_arm/Firmware/CarMainControl/CarMainControl/libraries/sdk/Peripheral/ch32v30x.h \
+ D:\projects\mechanical_arm\Firmware\CarMainControl\CarMainControl\libraries\sdk\Core/core_riscv.h \
+ D:\projects\mechanical_arm\Firmware\CarMainControl\CarMainControl\libraries\sdk\Startup/system_ch32v30x.h \
+ D:/projects/mechanical_arm/Firmware/CarMainControl/CarMainControl/libraries/sdk/Peripheral/ch32v30x_rcc.h
 
-D:/桌面/ch32v307_core_board/CarMainControl/CarMainControl/libraries/sdk/Peripheral/ch32v30x_can.h:
+D:/projects/mechanical_arm/Firmware/CarMainControl/CarMainControl/libraries/sdk/Peripheral/ch32v30x_can.h:
 
-D:/桌面/ch32v307_core_board/CarMainControl/CarMainControl/libraries/sdk/Peripheral/ch32v30x.h:
+D:/projects/mechanical_arm/Firmware/CarMainControl/CarMainControl/libraries/sdk/Peripheral/ch32v30x.h:
 
-D:\桌面\ch32v307_core_board\CarMainControl\CarMainControl\libraries\sdk\Core/core_riscv.h:
+D:\projects\mechanical_arm\Firmware\CarMainControl\CarMainControl\libraries\sdk\Core/core_riscv.h:
 
-D:\桌面\ch32v307_core_board\CarMainControl\CarMainControl\libraries\sdk\Startup/system_ch32v30x.h:
+D:\projects\mechanical_arm\Firmware\CarMainControl\CarMainControl\libraries\sdk\Startup/system_ch32v30x.h:
 
-D:/桌面/ch32v307_core_board/CarMainControl/CarMainControl/libraries/sdk/Peripheral/ch32v30x_rcc.h:
+D:/projects/mechanical_arm/Firmware/CarMainControl/CarMainControl/libraries/sdk/Peripheral/ch32v30x_rcc.h:
