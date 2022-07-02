@@ -140,6 +140,16 @@ void CAN_Mode_Init(uint8_t tsjw, uint8_t tbs2, uint8_t tbs1, uint16_t brp, uint8
     CAN_FilterInitSturcture.CAN_FilterFIFOAssignment = CAN_Filter_FIFO0;
     CAN_FilterInitSturcture.CAN_FilterActivation = ENABLE;
     CAN_FilterInit( &CAN_FilterInitSturcture );
+
+    CAN_ClearITPendingBit( CAN1, CAN_IT_FMP0 );
+    NVIC_InitTypeDef NVIC_InitStructure;
+    NVIC_InitStructure.NVIC_IRQChannel = USB_LP_CAN1_RX0_IRQn;
+    NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 1;
+    NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;
+    NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
+    NVIC_Init(&NVIC_InitStructure);
+
+    CAN_ITConfig( CAN1, CAN_IT_FMP0, ENABLE );
 }
 
 /*********************************************************************

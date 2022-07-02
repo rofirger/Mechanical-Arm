@@ -15,6 +15,26 @@
 #define AXIS5   0
 #define AXIS6   1
 #define AXIS7   0
+
+#if (AXIS1 == 1)
+#define JOINT_INDEX 1
+#endif
+#if (AXIS2 == 1)
+#define JOINT_INDEX 2
+#endif
+#if (AXIS3 == 1)
+#define JOINT_INDEX 3
+#endif
+#if (AXIS4 == 1)
+#define JOINT_INDEX 4
+#endif
+#if (AXIS5 == 1)
+#define JOINT_INDEX 5
+#endif
+#if (AXIS6 == 1)
+#define JOINT_INDEX 6
+#endif
+
 /*
  * ¹ýÂËÆ÷ID
  */

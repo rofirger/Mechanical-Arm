@@ -195,6 +195,7 @@ void Init()
     gpio_init(EYELLOW_LED, GPO, GPIO_LOW, GPO_PUSH_PULL);
     KeyInit();
     CAN_Mode_Init( CAN_SJW_1tq, CAN_BS2_5tq, CAN_BS1_6tq, 12, CAN_Mode_Normal );
+
     W25QXX_Init();
 }
 
@@ -251,6 +252,9 @@ int main(void)
     //gpio_set_level(BEEP, 1);
     uint16_t flash_id = W25QXX_ReadID();
     tft180_show_string(10, 10, "Hello world" );
+
+    uint8_t pxbuf[10] = {'\0'};
+
     while(1)
     {
         WCHNET_MainTask();                                                     /*以太网库主任务函数，需要循环调用*/
@@ -259,9 +263,7 @@ int main(void)
            WCHNET_HandleGlobalInt();
         }
         FiveKeyStatus();
-        //system_delay_ms(1);
         Blink(1000);
-        //ETH_led();
     }
 }
 

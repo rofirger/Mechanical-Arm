@@ -5,6 +5,7 @@
 #include "Motor.h"
 #include "zf_common_headfile.h"
 #include "MyCan.h"
+#include "stdlib.h"
 
 
 /*
@@ -97,6 +98,29 @@ void ProcessCANMsg(char* _can_msg)
                 char* _third_cmd = strtok(NULL, " ");
                 if (_third_cmd)
                     CCV_MotorStep(atoi(_third_cmd), 15);
+            }
+            else if (strcmp(_sec_cmd, "J") == 0)
+            {
+                MT6816_Structure _data;
+                MT6816_ReadAngle(&_data);
+                uint8_t _send_back_pos[8];
+                char _trans_num[8] = {'\0'};
+                uint8_t _num = 4;
+                _send_back_pos[0] = 'P';
+                _send_back_pos[1] = ' ';
+                _send_back_pos[2] = (uint8_t)JOINT_INDEX + '0';
+                _send_back_pos[3] = ' ';
+                itoa(_data._decode_angle, _trans_num, 10);
+                for (uint8_t _i = 0; _trans_num[_i] != '\0' && _i < 8; ++_i)
+                {
+                    _send_back_pos[_num] = _trans_num[_i];
+                    ++_num;
+                }
+                if (_num < 8)
+                {
+                    _send_back_pos[_num] = '#';
+                    CAN_Send_Msg(_send_back_pos, _num);
+                }
             }
         }
         else if (strcmp(_head_cmd, "LED") == 0)

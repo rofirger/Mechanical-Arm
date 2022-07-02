@@ -42,19 +42,19 @@ void Init()
     //驱动板初始化
     // 初始化PWM2 通道1 使用引脚A15  输出PWM频率50HZ   占空比为百分之 1000/PWM_DUTY_MAX*100
     //T3接口
-       pwm_init(PWM_T3_1, 5000, 3000);
-       pwm_init(PWM_T3_2, 5000, 0);
+    pwm_init(PWM_T3_1, 5000, 3000);
+    pwm_init(PWM_T3_2, 5000, 0);
     //T4接口
-       pwm_init(PWM_T4_3, 5000, 0);
-       pwm_init(PWM_T4_4, 5000, 0);
+    pwm_init(PWM_T4_3, 5000, 0);
+    pwm_init(PWM_T4_4, 5000, 0);
     //T5接口
-       pwm_init(PWM_T5_5, 5000, 0);
-       pwm_init(PWM_T5_6, 5000, 0);
+    pwm_init(PWM_T5_5, 5000, 0);
+    pwm_init(PWM_T5_6, 5000, 0);
     //T6接口
-       pwm_init(PWM_T6_7, 5000, 0);
-       pwm_init(PWM_T6_8, 5000, 0);
+    pwm_init(PWM_T6_7, 5000, 0);
+    pwm_init(PWM_T6_8, 5000, 0);
     //EN使能
-       gpio_init(MOTOR_EN, GPO, GPIO_LOW, GPO_PUSH_PULL);
+    gpio_init(MOTOR_EN, GPO, GPIO_LOW, GPO_PUSH_PULL);
 
 
     //超声波测距模块
@@ -65,8 +65,8 @@ void Init()
 //       exti_init(ULTRASONIC2_ECHO, EXTI_TRIGGER_RISING);          //初始化中断
 
     //舵机初始化
-       pwm_init(PWM_STEER1, 50, 0);
-       //pwm_init(PWM_STEER2, 50, 1000);
+    pwm_init(PWM_STEER1, 50, 0);
+    //pwm_init(PWM_STEER2, 50, 1000);
 //       pwm_init(PWM_STEER3, 50, 1000);
 //       pwm_init(PWM_STEER4, 50, 1000);
 
@@ -75,7 +75,7 @@ void Init()
 //       mt9v03x_init_dvp();
 
     //编码器初始化
-       encoder_init_dir(ENCODER_DIR_1, ENCODER_DIR_DIR_1, ENCODER_DIR_PULSE_1);          // 初始化编码器模块与引脚 带方向增量编码器模式
+    encoder_init_dir(ENCODER_DIR_1, ENCODER_DIR_DIR_1, ENCODER_DIR_PULSE_1);          // 初始化编码器模块与引脚 带方向增量编码器模式
 }
 
 
@@ -90,15 +90,15 @@ int main(void)
     Init();
     interrupt_global_enable();              // 总中断最后开启
     gpio_set_level(MOTOR_EN, 1);            //驱动板使能
-    tft180_show_string(0,0,"HELLO WORLD!");
+    tft180_show_string(0, 0, "HELLO WORLD!");
 
     angle = 90;
     angle_duty = angle_set_duty(angle);
-    pwm_set_duty(PWM_STEER1,angle_duty);
+    pwm_set_duty(PWM_STEER1, angle_duty);
     system_delay_ms(500);
-    pwm_set_duty(PWM_STEER1,0);
+    pwm_set_duty(PWM_STEER1, 0);
 
-    while(1)
+    while (1)
     {
         //摄像头
 //        if(mt9v03x_finish_flag_dvp)
@@ -112,7 +112,7 @@ int main(void)
         encoder_data = encoder_get_count(ENCODER_DIR_1);                          // 获取编码器计数
         encoder_clear_count(ENCODER_DIR_1);                                       // 清空编码器计数
         printf("ENCODER_DIR counter \t\t%d .\r\n", encoder_data);               // 输出编码器计数信息
-        tft180_show_float(0,0,encoder_data,5,5);                              // 输出编码器计数信息
+        tft180_show_float(0, 0, encoder_data, 5, 5);                              // 输出编码器计数信息
 
 
         //超声波
@@ -143,10 +143,3 @@ int main(void)
         Blink(1000);
     }
 }
-
-
-
-
-
-
-

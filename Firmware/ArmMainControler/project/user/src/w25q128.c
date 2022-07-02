@@ -40,9 +40,8 @@ void W25QXX_Init(void)
     SPI_InitStructure.SPI_Mode = SPI_Mode_Master;
     SPI_InitStructure.SPI_DataSize = SPI_DataSize_8b;
 
-    // 选择SPI模式0，此模式下不需要额外配置DW1000的GPIO5/6
-    SPI_InitStructure.SPI_CPOL = SPI_CPOL_Low;
-    SPI_InitStructure.SPI_CPHA = SPI_CPHA_1Edge;
+    SPI_InitStructure.SPI_CPOL = SPI_CPOL_High;
+    SPI_InitStructure.SPI_CPHA = SPI_CPHA_2Edge;
 
     SPI_InitStructure.SPI_BaudRatePrescaler = FLASH_SPI_PRESCALER;      // 定义波特率预分频的值
     SPI_InitStructure.SPI_NSS = SPI_NSS_Soft;                               // 主机模式，使用软件控制NSS引脚

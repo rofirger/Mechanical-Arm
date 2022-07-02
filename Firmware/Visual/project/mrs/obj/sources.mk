@@ -26,10 +26,6 @@ sdk/Core \
 sdk/Peripheral \
 sdk/Startup \
 user_c \
-zbar \
-zbar/decoder \
-zbar/processor \
-zbar/qrcode \
 zf_common \
 zf_device \
 zf_driver \

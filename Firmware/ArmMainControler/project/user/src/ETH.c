@@ -237,18 +237,8 @@ void WCHNET_HandleSockInt(u8 sockeid,u8 initstat)
     if(initstat & SINT_STAT_RECV)                                               /* socket接收中断*/
     {
        len = WCHNET_SocketRecvLen(sockeid,NULL);                                /* 获取socket缓冲区数据长度  */
-       printf("WCHNET_SocketRecvLen %d \r\n",len);
-       WCHNET_SocketRecv(sockeid,MyBuf,&len);                                   /* 获取socket缓冲区数据 */
-       WCHNET_SocketSend(sockeid,MyBuf,&len);                                   /* 演示回传数据 */
-       if (strcmp(MyBuf, "led_on") == 0)
-       {
-           gpio_set_level(LED_INDICATOR, 1);
-       }
-       else if (strcmp(MyBuf, "led_off") == 0)
-       {
-           gpio_set_level(LED_INDICATOR, 0);
-       }
-       tft180_show_string(10, 10, MyBuf );
+       WCHNET_SocketRecv(sockeid, MyBuf, &len);                                   /* 获取socket缓冲区数据 */
+       ETH_MsgProcess(MyBuf);
     }
     if(initstat & SINT_STAT_CONNECT)                                            /* socket连接成功中断*/
     {

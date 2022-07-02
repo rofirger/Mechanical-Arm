@@ -2,8 +2,7 @@
 #include "zf_common_headfile.h"
 #include "dvp.h"
 #include "ov.h"
-#include "zbar.h"
-#include "image.h"
+#include "sram.h"
 
 uint8_t dvp_img_finish_flag = 0;
 extern __aligned(4) uint16 img_dvp[ROW_TFT_HEIGHT][ROW_TFT_WIDTH / 2];
@@ -152,59 +151,17 @@ void ToGray()
 
 }
 
-int Zbar_Test(void* raw, int width, int height)
-{
-      zbar_image_scanner_t *scanner = NULL;
-    /* create a reader */
-    scanner = zbar_image_scanner_create();
-
-    /* configure the reader */
-    zbar_image_scanner_set_config(scanner, 0, ZBAR_CFG_ENABLE, 1);
-
-    /* obtain image data */
-    //int width = 0, height = 0;
-    //void *raw = NULL;
-    //get_data("barcode.png", &width, &height, &raw);
-
-    /* wrap image data */
-    zbar_image_t *image = zbar_image_create();
-    zbar_image_set_format(image, *(int*)"Y800");
-    zbar_image_set_size(image, width, height);
-    zbar_image_set_data(image, raw, width * height, zbar_image_free_data);
-
-    /* scan the image for barcodes */
-    int n = zbar_scan_image(scanner, image);
-    printf("n = %d\r\n", n);
-    /* extract results */
-    const zbar_symbol_t *symbol = zbar_image_first_symbol(image);
-    for(; symbol; symbol = zbar_symbol_next(symbol)) {
-        /* do something useful with results */
-        zbar_symbol_type_t typ = zbar_symbol_get_type(symbol);
-        const char *data = zbar_symbol_get_data(symbol);
-        printf("\r\ndecoded %s symbol \"%s\"\r\n",
-               zbar_get_symbol_name(typ), data);
-        printf("len = %d\r\n",strlen(data));
-        for(int k=0; k<strlen(data); k++)
-        {
-            printf("%X ", (uint8_t)data[k]);
-        }
-    }
-
-    /* clean up */
-    zbar_image_destroy(image);
-    zbar_image_scanner_destroy(scanner);
-
-    return(0);
-}
 
 void Init(void)
 {
+    NVIC_PriorityGroupConfig(NVIC_PriorityGroup_2);
     tft180_init();
     // CAN初始化
-    CAN_Mode_Init( CAN_SJW_1tq, CAN_BS2_5tq, CAN_BS1_6tq, 12, CAN_Mode_Normal );
+    //CAN_Mode_Init( CAN_SJW_1tq, CAN_BS2_5tq, CAN_BS1_6tq, 12, CAN_Mode_Normal );
     gpio_init(E7, GPO, GPIO_LOW, GPO_PUSH_PULL);
     // 舵机初始化
     pwm_init(TIM5_PWM_CH1_A0, 50, 1000);
+    // FSMC_SRAM_Init();
 }
 
 int main(void)
@@ -236,17 +193,17 @@ int main(void)
             //ToGray();
             //GetHistGram(ROW_TFT_WIDTH / 2, ROW_TFT_HEIGHT);
             //uint8_t thredshold = OTSUThreshold();
-            //BinaryzationProcess(ROW_TFT_HEIGHT, ROW_TFT_WIDTH / 2, 220);
-           // tft180_show_gray_image(0, 0, binary_dvp_img[0], ROW_TFT_WIDTH / 2, ROW_TFT_HEIGHT, ROW_TFT_WIDTH / 2, ROW_TFT_HEIGHT, 0);
+            //BinaryzationProcess(ROW_TFT_HEIGHT, ROW_TFT_WIDTH / 2, thredshold);
+            //tft180_show_gray_image(0, 0, binary_dvp_img[0], ROW_TFT_WIDTH / 2, ROW_TFT_HEIGHT, ROW_TFT_WIDTH / 2, ROW_TFT_HEIGHT, 0);
+            //Zbar_Test(binary_dvp_img[0], ROW_TFT_WIDTH / 2, ROW_TFT_HEIGHT);
             dvp_img_finish_flag = 0;
-
         }
         system_delay_ms(2);
-        px = CAN_Receive_Msg((char*)pxbuf);
-        if( px )
-        {
-            tft180_show_string(0, 0, pxbuf);
-        }
+        //px = CAN_Receive_Msg((char*)pxbuf);
+        //if( px )
+        //{
+          //  tft180_show_string(0, 0, pxbuf);
+        //}
     }
 }
 

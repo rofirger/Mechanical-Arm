@@ -76,12 +76,8 @@ user_c/main.o: \
  D:\projects\mechanical_arm\Firmware\Visual\libraries\zf_device/zf_device_virtual_oscilloscope.h \
  D:\projects\mechanical_arm\Firmware\Visual\project\user\inc/dvp.h \
  D:\projects\mechanical_arm\Firmware\Visual\project\user\inc/ov.h \
- D:\projects\mechanical_arm\Firmware\Visual\project\zbar/zbar.h \
- D:\projects\mechanical_arm\Firmware\Visual\project\zbar/image.h \
- D:\projects\mechanical_arm\Firmware\Visual\project\zbar/config.h \
- D:\projects\mechanical_arm\Firmware\Visual\project\zbar/error.h \
- D:\projects\mechanical_arm\Firmware\Visual\project\zbar/symbol.h \
- D:\projects\mechanical_arm\Firmware\Visual\project\zbar/refcnt.h
+ D:\projects\mechanical_arm\Firmware\Visual\project\user\inc/sram.h \
+ D:\projects\mechanical_arm\Firmware\Visual\project\user\inc/headfile.h
 
 D:\projects\mechanical_arm\Firmware\Visual\libraries\zf_common/zf_common_headfile.h:
 
@@ -235,14 +231,6 @@ D:\projects\mechanical_arm\Firmware\Visual\project\user\inc/dvp.h:
 
 D:\projects\mechanical_arm\Firmware\Visual\project\user\inc/ov.h:
 
-D:\projects\mechanical_arm\Firmware\Visual\project\zbar/zbar.h:
+D:\projects\mechanical_arm\Firmware\Visual\project\user\inc/sram.h:
 
-D:\projects\mechanical_arm\Firmware\Visual\project\zbar/image.h:
-
-D:\projects\mechanical_arm\Firmware\Visual\project\zbar/config.h:
-
-D:\projects\mechanical_arm\Firmware\Visual\project\zbar/error.h:
-
-D:\projects\mechanical_arm\Firmware\Visual\project\zbar/symbol.h:
-
-D:\projects\mechanical_arm\Firmware\Visual\project\zbar/refcnt.h:
+D:\projects\mechanical_arm\Firmware\Visual\project\user\inc/headfile.h:

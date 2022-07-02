@@ -19,6 +19,8 @@
 
 #include "zf_common_headfile.h"
 #include "WCHNET.h"
+#include "msg_process.h"
+
 void NMI_Handler(void)       __attribute__((interrupt("WCH-Interrupt-fast")));
 void HardFault_Handler(void) __attribute__((interrupt("WCH-Interrupt-fast")));
 
@@ -383,7 +385,20 @@ void TIM10_UP_IRQHandler(void)
     }
 }
 
-
+extern uint8_t* CAN_MSG[8];
+void USB_LP_CAN1_RX0_IRQHandler(void) __attribute__((interrupt("WCH-Interrupt-fast")));
+void USB_LP_CAN1_RX0_IRQHandler(void)
+{
+    if (CAN_GetITStatus(CAN1, CAN_IT_FMP0) == SET)
+    {
+        uint8_t px = CAN_Receive_Msg(CAN_MSG);
+        if (px)
+        {
+            CAN_MsgProcess(CAN_MSG);
+        }
+        CAN_ClearITPendingBit(CAN1, CAN_IT_FMP0);
+    }
+}
 
 //.section    .text.vector_handler, "ax", @progbits
 

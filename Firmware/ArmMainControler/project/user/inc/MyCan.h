@@ -20,6 +20,8 @@ uint8_t CAN_Receive_Msg(uint8_t *buf );
 #define MAIN_CONTROLER_FILTER_ID_C          (MAIN_CONTROLER_FILTER_ID_A + 2 * (1 << 5))
 #define MAIN_CONTROLER_FILTER_ID_D          (MAIN_CONTROLER_FILTER_ID_A + 3 * (1 << 5))
 
+#define JOINT_ID_BASE                       (0x80)
+#define JOINT_ID_OFFSET                     (0x80)
 
 // (1 00 00000)
 #define FILTER_ID_AXIS1_A                   (0x80)
