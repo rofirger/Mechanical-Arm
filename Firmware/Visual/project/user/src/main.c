@@ -151,17 +151,25 @@ void ToGray()
 
 }
 
+void SendImgToUart(const uint8_t* _img, uint8_t _width, uint8_t _height)
+{
+    uart_write_byte(UART_7, 0x01); uart_write_byte(UART_7, 0xFE);
+    uart_write_buffer(UART_7, _img, _width * _height);
+    uart_write_byte(UART_7, 0xFE); uart_write_byte(UART_7, 0x01);
+}
 
 void Init(void)
 {
     NVIC_PriorityGroupConfig(NVIC_PriorityGroup_2);
     tft180_init();
     // CAN初始化
-    //CAN_Mode_Init( CAN_SJW_1tq, CAN_BS2_5tq, CAN_BS1_6tq, 12, CAN_Mode_Normal );
+    CAN_Mode_Init( CAN_SJW_1tq, CAN_BS2_5tq, CAN_BS1_6tq, 12, CAN_Mode_Normal );
     gpio_init(E7, GPO, GPIO_LOW, GPO_PUSH_PULL);
     // 舵机初始化
     pwm_init(TIM5_PWM_CH1_A0, 50, 1000);
     // FSMC_SRAM_Init();
+    // 初始化UART
+    uart_init(UART_7, 57600, UART7_TX_C2, UART7_RX_C3);
 }
 
 int main(void)
@@ -190,7 +198,8 @@ int main(void)
         if (dvp_img_finish_flag)
         {
             tft180_show_rgb565_image(0, 0, img_dvp[0], ROW_TFT_WIDTH / 2, ROW_TFT_HEIGHT, ROW_TFT_WIDTH / 2, ROW_TFT_HEIGHT, 1);
-            //ToGray();
+            ToGray();
+            SendImgToUart((uint8_t*)binary_dvp_img, ROW_TFT_WIDTH / 2, ROW_TFT_HEIGHT);
             //GetHistGram(ROW_TFT_WIDTH / 2, ROW_TFT_HEIGHT);
             //uint8_t thredshold = OTSUThreshold();
             //BinaryzationProcess(ROW_TFT_HEIGHT, ROW_TFT_WIDTH / 2, thredshold);

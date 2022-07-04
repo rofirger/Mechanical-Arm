@@ -11,7 +11,10 @@
 #include "msg_process.h"
 #include <stdlib.h>
 
+
+extern float EulerPosNew[6];
 uint8_t* CAN_MSG[8];
+
 
 /*
  * @brief:ETH消息处理
@@ -72,6 +75,21 @@ void ETH_MsgProcess(char* _eth_msg)
                     }
                 }
             }
+        }
+        else if (strcmp(_head_cmd, "MOV") == 0)
+        {
+            char* _pos1_cmd = strtok(NULL, ",");
+            EulerPosNew[0] = strtof(_pos1_cmd, NULL);
+            char* _pos2_cmd = strtok(NULL, ",");
+            EulerPosNew[1] = strtof(_pos2_cmd, NULL);
+            char* _pos3_cmd = strtok(NULL, ",");
+            EulerPosNew[2] = strtof(_pos3_cmd, NULL);
+            char* _pos4_cmd = strtok(NULL, ",");
+            EulerPosNew[3] = strtof(_pos4_cmd, NULL);
+            char* _pos5_cmd = strtok(NULL, ",");
+            EulerPosNew[4] = strtof(_pos5_cmd, NULL);
+            char* _pos6_cmd = strtok(NULL, "#");
+            EulerPosNew[5] = strtof(_pos6_cmd, NULL);
         }
     }
 }

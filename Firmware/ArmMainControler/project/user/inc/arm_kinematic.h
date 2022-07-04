@@ -9,6 +9,17 @@
 #define ARM_KINEMATIC_H_
 
 #include "headfile.h"
+
+#ifndef bool
+#define bool        unsigned char
+#endif
+#ifndef false
+#define false       0
+#endif
+#ifndef true
+#define true        1
+#endif
+
 // 6R机械臂连杆参数矩阵. 分别为：绕 X 顺时针旋转、沿 X 方向平移、沿Z方向平移
 // 旋转单位:°   平移单位: mm
 // 采取DH参数XZ变换(改进DH参数)

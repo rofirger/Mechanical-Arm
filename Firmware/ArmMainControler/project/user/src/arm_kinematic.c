@@ -19,7 +19,14 @@ const float link_parameter[6][4] = {
         {-PI_2, 0, DH_R4_R5_L, 0},
 };
 
-
+// 当前机械臂末端的欧拉位置
+float EulerPosNow[6];
+// 新目标机械臂末端的欧拉位置
+float EulerPosNew[6];
+// 当前机械臂关节的旋转角
+float JointRotationNow[6];
+// 目标机械臂关节旋转角
+float JointRotationNew[6];
 
 /*
  * @brief:角度换算弧度
@@ -238,14 +245,23 @@ void RobotFK(const float* _joint_rotation, float* _output_joint_six_param)
  * @brief:运动学逆解
  * @param:  _joint_rotation[const float*]:末端目标点相对原点的变换矩阵                _output_solve[IK_AngleSlove*]:未经选择的六轴角度解
  */
-void RobotIK(const float* _joint_rotation, IK_AngleSlove* _output_solve)
+bool RobotIK(const float* _joint_rotation, IK_AngleSlove* _output_solve, const float* _last_joint)
 {
+    /*
+    * 此机械臂一般存在 8 个逆解。具体请看代码分析
+    */
     float _joint3[4] = { -6666.66 ,-6666.66 ,-6666.66 ,-6666.66 };
     unsigned char _joint3_solve_num = 0;
     float _joint2[8] = { -6666.66 ,-6666.66 ,-6666.66 ,-6666.66 , -6666.66 ,-6666.66 ,-6666.66 ,-6666.66 };
     unsigned char _joint2_solve_num = 0;
     float _joint1[8] = { -6666.66 ,-6666.66 ,-6666.66 ,-6666.66 , -6666.66 ,-6666.66 ,-6666.66 ,-6666.66 };
     unsigned char _joint1_solve_num = 0;
+    float _joint4[8] = { -6666.66 ,-6666.66 ,-6666.66 ,-6666.66 , -6666.66 ,-6666.66 ,-6666.66 ,-6666.66 };
+    unsigned char _joint4_solve_num = 0;
+    float _joint5[8] = { -6666.66 ,-6666.66 ,-6666.66 ,-6666.66 , -6666.66 ,-6666.66 ,-6666.66 ,-6666.66 };
+    unsigned char _joint5_solve_num = 0;
+    float _joint6[8] = { -6666.66 ,-6666.66 ,-6666.66 ,-6666.66 , -6666.66 ,-6666.66 ,-6666.66 ,-6666.66 };
+    unsigned char _joint6_solve_num = 0;
 
     float _x = _joint_rotation[3];
     float _y = _joint_rotation[7];
@@ -365,21 +381,58 @@ void RobotIK(const float* _joint_rotation, IK_AngleSlove* _output_solve)
             // 解joint4
             for (unsigned char _i = 0; _i < _joint3_solve_num * 2; ++_i)
             {
-                // 先判断joint5的旋转角度是否为0
+                if (fabsf(_joint2[_i] + 6666.66) > 6000 && fabsf(_joint1[_i] + 6666.66) > 6000 && fabsf(_joint3[_i] + 6666.66) > 6000)
+                {
+                    float _c5_0_r13 = cosf(_joint1[_i]) * sinf(_joint2[_i] + _joint3[_i / 2]);
+                    float _c5_0_r23 = sinf(_joint1[_i]) * sinf(_joint2[_i] + _joint3[_i / 2]);
+                    float _c5_0_r33 = cosf(_joint2[_i] + _joint3[_i / 2]);
+                    // joint5旋转角为0的情况
+                    if (fabsf(_c5_0_r13 - _joint_rotation[2]) < 0.001 &&
+                        fabsf(_c5_0_r23 - _joint_rotation[6]) < 0.001 &&
+                        fabsf(_c5_0_r33 - _joint_rotation[10]) < 0.001)
+                    {
+                        // 令joint4不改变
+                        _joint5[_i] = 0;
+                        _joint4[_i] = _last_joint[3];
+                        float _sin6 = _joint_rotation[0] * (sinf(_joint1[_i]) * cosf(_joint4[_i]) - cosf(_joint1[_i]) * cosf(_joint2[_i] + _joint3[_i / 2]))
+                            - _joint_rotation[4] * (sinf(_joint1[_i]) * cosf(_joint2[_i] + _joint3[_i / 2]) * sinf(_joint4[_i]) + cosf(_joint1[_i]) * cosf(_joint4[_i]))
+                            - _joint_rotation[8] * (sinf(_joint2[_i] + _joint3[_i / 2]) * sinf(_joint4[_i]));
+                        float _cos6 = _joint_rotation[1] * (sinf(_joint1[_i]) * cosf(_joint4[_i]) - cosf(_joint1[_i]) * cosf(_joint2[_i] + _joint3[_i / 2]))
+                            - _joint_rotation[5] * (sinf(_joint1[_i]) * cosf(_joint2[_i] + _joint3[_i / 2]) * sinf(_joint4[_i]) + cosf(_joint1[_i]) * cosf(_joint4[_i]))
+                            - _joint_rotation[9] * (sinf(_joint2[_i] + _joint3[_i / 2]) * sinf(_joint4[_i]));
+                        _joint6[_i] = atanf(_sin6 / _cos6);
+                    }
+                    // joint5旋转角不为0的情况
+                    else
+                    {
+                        float _t4_molecule = sinf(_joint1[_i]) * _joint_rotation[2] - cosf(_joint1[_i]) * _joint_rotation[6];
+                        float _t4_denominator = cosf(_joint1[_i]) * cosf(_joint2[_i] + _joint3[_i / 2]) * _joint_rotation[2]
+                            + sinf(_joint1[_i]) * cosf(_joint2[_i] + _joint3[_i / 2]) * _joint_rotation[6]
+                            + sinf(_joint2[_i] + _joint3[_i / 2]) * _joint_rotation[10];
+                        _joint4[_i] = atanf(_t4_molecule / _t4_denominator);
+                        _joint5[_i] = asinf(-_t4_denominator / cosf(_joint4[_i]));
+                        float _sin6 = _joint_rotation[0] * (sinf(_joint1[_i]) * cosf(_joint4[_i]) - cosf(_joint1[_i]) * cosf(_joint2[_i] + _joint3[_i / 2]))
+                            - _joint_rotation[4] * (sinf(_joint1[_i]) * cosf(_joint2[_i] + _joint3[_i / 2]) * sinf(_joint4[_i]) + cosf(_joint1[_i]) * cosf(_joint4[_i]))
+                            - _joint_rotation[8] * (sinf(_joint2[_i] + _joint3[_i / 2]) * sinf(_joint4[_i]));
+                        float _cos6 = _joint_rotation[1] * (sinf(_joint1[_i]) * cosf(_joint4[_i]) - cosf(_joint1[_i]) * cosf(_joint2[_i] + _joint3[_i / 2]))
+                            - _joint_rotation[5] * (sinf(_joint1[_i]) * cosf(_joint2[_i] + _joint3[_i / 2]) * sinf(_joint4[_i]) + cosf(_joint1[_i]) * cosf(_joint4[_i]))
+                            - _joint_rotation[9] * (sinf(_joint2[_i] + _joint3[_i / 2]) * sinf(_joint4[_i]));
+                        _joint6[_i] = atanf(_sin6 / _cos6);
+                    }
+                }
+
             }
-
-
-
-            int i = 0;
-            i = 10;
         }
         else
         {
             // 不存在解
+            return false;
         }
     }
     else
     {
         // 不存在解
+        return false;
     }
+    return true;
 }
