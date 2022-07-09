@@ -78,4 +78,13 @@
 #define MYESP_MISO               B4
 #define MYESP_CS                 D7
 
+// button2ÖÐ¶Ï
+#define BUTTON2_GPIO_PIN     GPIO_Pin_3
+#define BUTTON2_GPIO_PORT    GPIOA
+#define BUTTON2_PORT_SOURCE  GPIO_PortSourceGPIOA
+#define BUTTON2_PIN_SOURCE   GPIO_PinSource3
+#define BUTTON2_LINE         EXTI_Line3
+#define BUTTON2_IRQ          EXTI3_IRQn
+
+
 #endif /* CONFIG_H_ */

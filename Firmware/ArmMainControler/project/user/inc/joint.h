@@ -1,23 +1,14 @@
 /*
- * Motor.h
+ * joint.h
  *
- *  Created on: 2022年4月21日
+ *  Created on: 2022年7月5日
  *      Author: 随风
  */
 
-#ifndef MOTOR_H_
-#define MOTOR_H_
+#ifndef JOINT_H_
+#define JOINT_H_
 
-#include "MT6816.h"
-#include "MyCan.h"
-
-// 定义输出步进电机驱动GPIO输出引脚
-#define AP_STEP D11
-#define AN_STEP D9
-#define BP_STEP D15
-#define BN_STEP D13
-// 定义驱动板上的指示灯
-#define INDICATOR E2
+#include "arm_kinematic.h"
 
 // 减速器速比
 #define SPEED_RATIO         26.8510
@@ -57,38 +48,6 @@
 #define JOINT6_MAX_KINEMATICS_ANGLE     JOINT6_MAX_ANGLE
 #define JOINT6_MIN_KINEMATICS_ANGLE     JOINT6_MIN_ANGLE
 
-
-#if (AXIS1 == 1)
-// 从上往下看，逆时针方向没有机械误差，即单方向往逆时针方向运动到此位置
-#define INIT_POS_ANGLE          308
-#define BALANCE_POS_ANGLE       308
-#endif
-
-#if (AXIS2 == 1)
-#define INIT_POS_ANGLE          157
-#define BALANCE_POS_ANGLE       69
-#endif
-
-#if (AXIS3 == 1)
-#define INIT_POS_ANGLE          320
-#define BALANCE_POS_ANGLE       28
-#endif
-
-#if (AXIS4 == 1)
-#define INIT_POS_ANGLE          256
-#define BALANCE_POS_ANGLE       256
-#endif
-
-#if (AXIS5 == 1)
-#define INIT_POS_ANGLE          108
-#define BALANCE_POS_ANGLE       108
-#endif
-
-#if (AXIS6 == 1)
-#define INIT_POS_ANGLE          68
-#define BALANCE_POS_ANGLE       68
-#endif
-
 typedef struct JointRotationPos
 {
     int _balance_pos;                   // 平衡点，注意该值代表编码器的读数(已经过解码)
@@ -98,13 +57,8 @@ typedef struct JointRotationPos
     int _init_pos_offset_balance;       // 初始位置相对平衡位置的偏差
 }JointRotationPos;
 
-typedef enum RotionDir
-{
-    INCREASE_ENCODER,
-    DECREASE_ENCODER
-}RotionDir;
-void CV_MotorStep(uint16_t _times, uint16_t _ms_interval);
-void CCV_MotorStep(uint16_t _times, uint16_t _ms_interval);
-void KeepPos();
-void SetPos(const float _motor_angle);
-#endif /* MOTOR_H_ */
+
+void InitRobot(void);
+void BackRobot(void);
+
+#endif /* JOINT_H_ */

@@ -51,13 +51,13 @@ static uint32 status_reg = 0;
 /* Delay between frames, in UWB microseconds. See NOTE 4 below. */
 /* This is the delay from Frame RX timestamp to TX reply timestamp used for calculating/setting the DW1000's delayed TX function. This includes the
  * frame length of approximately 2.46 ms with above configuration. */
-#define POLL_RX_TO_RESP_TX_DLY_UUS 10400     // 2600
+#define POLL_RX_TO_RESP_TX_DLY_UUS 2600
 /* This is the delay from the end of the frame transmission to the enable of the receiver, as programmed for the DW1000's wait for response feature. */
-#define RESP_TX_TO_FINAL_RX_DLY_UUS 2000     // 500
+#define RESP_TX_TO_FINAL_RX_DLY_UUS 500
 /* Receive final timeout. See NOTE 5 below. */
-#define FINAL_RX_TIMEOUT_UUS 33000 // 3300
+#define FINAL_RX_TIMEOUT_UUS 3300
 /* Preamble timeout, in multiple of PAC size. See NOTE 6 below. */
-#define PRE_TIMEOUT 20
+#define PRE_TIMEOUT 3000
 
 /* Timestamps of frames transmission/reception.
  * As they are 40-bit wide, we need to define a 64-bit int type to handle them. */
@@ -113,7 +113,7 @@ int main(void)
     /* Set preamble timeout for expected frames. See NOTE 6 below. */
     dwt_setpreambledetecttimeout(PRE_TIMEOUT);
 
-    /* Loop forever sending and receiving frames periodically. */
+    /* Loop forever responding to ranging requests. */
     while (1)
     {
         /* Clear reception timeout to start next ranging process. */
@@ -139,7 +139,7 @@ int main(void)
             {
                 dwt_readrxdata(rx_buffer, frame_len, 0);
             }
-            //dwt_write32bitreg(SYS_STATUS_ID, SYS_STATUS_ALL_RX_ERR);
+
             /* Check that the frame is a poll sent by "DS TWR initiator" example.
              * As the sequence number field of the frame is not relevant, it is cleared to simplify the validation of the frame. */
             rx_buffer[ALL_MSG_SN_IDX] = 0;
@@ -221,9 +221,10 @@ int main(void)
 
                         tof = tof_dtu * DWT_TIME_UNITS;
                         distance = tof * SPEED_OF_LIGHT;
-                        gpio_toggle_level(D7);
+
                         /* Display computed distance on LCD. */
                         sprintf(dist_str, "DIST: %3.2f m", distance);
+                        //lcd_display_str(dist_str);
                     }
                 }
                 else

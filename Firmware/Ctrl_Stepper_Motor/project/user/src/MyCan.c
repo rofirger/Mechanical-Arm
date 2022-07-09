@@ -115,7 +115,7 @@ void CAN_Mode_Init(uint8_t tsjw, uint8_t tbs2, uint8_t tbs1, uint16_t brp, uint8
 /* identifier list mode, Two 16-bit filters, StdId: 0x317,0x316,0x315,0x314 */
   CAN_FilterInitSturcture.CAN_FilterMode = CAN_FilterMode_IdList;
   CAN_FilterInitSturcture.CAN_FilterScale = CAN_FilterScale_16bit;
-  CAN_FilterInitSturcture.CAN_FilterIdHigh = FILTER_ID_AXIS_D;
+  CAN_FilterInitSturcture.CAN_FilterIdHigh = JOINT_GENERAL_ID;
   CAN_FilterInitSturcture.CAN_FilterIdLow = FILTER_ID_AXIS_C;
   CAN_FilterInitSturcture.CAN_FilterMaskIdHigh = FILTER_ID_AXIS_B;
   CAN_FilterInitSturcture.CAN_FilterMaskIdLow = FILTER_ID_AXIS_A;
@@ -134,6 +134,16 @@ void CAN_Mode_Init(uint8_t tsjw, uint8_t tbs2, uint8_t tbs1, uint16_t brp, uint8
     CAN_FilterInitSturcture.CAN_FilterFIFOAssignment = CAN_Filter_FIFO0;
     CAN_FilterInitSturcture.CAN_FilterActivation = ENABLE;
     CAN_FilterInit( &CAN_FilterInitSturcture );
+
+    CAN_ClearITPendingBit( CAN1, CAN_IT_FMP0 );
+    NVIC_InitTypeDef NVIC_InitStructure;
+    NVIC_InitStructure.NVIC_IRQChannel = USB_LP_CAN1_RX0_IRQn;
+    NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 1;
+    NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;
+    NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
+    NVIC_Init(&NVIC_InitStructure);
+
+    CAN_ITConfig( CAN1, CAN_IT_FMP0, ENABLE );
 }
 
 /*********************************************************************

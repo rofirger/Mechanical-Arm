@@ -86,5 +86,6 @@ uint8_t CAN_Receive_Msg(uint8_t *buf );
 // (111 11 00000)
 #define FILTER_ID_AXIS7_D                   (FILTER_ID_AXIS7_A + 3 * (1 << 5))
 
+#define JOINT_GENERAL_ID                          0x400
 
 #endif /* MYCAN_H_ */

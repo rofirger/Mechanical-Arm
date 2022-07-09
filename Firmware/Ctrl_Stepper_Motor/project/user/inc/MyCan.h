@@ -7,7 +7,7 @@
 
 #ifndef MYCAN_H_
 #define MYCAN_H_
-#include "zf_common_headfile.h"
+#include "headfile.h"
 #define AXIS1   0
 #define AXIS2   0
 #define AXIS3   0
@@ -122,6 +122,9 @@
 // (111 11 00000)
 #define FILTER_ID_AXIS_D                   (FILTER_ID_AXIS_A + 3 * (1 << 5))
 #endif
+
+#define JOINT_GENERAL_ID                         0x400
+
 void CAN_Mode_Init(uint8_t tsjw, uint8_t tbs2, uint8_t tbs1, uint16_t brp, uint8_t mode );
 uint8_t CAN_Send_Msg(uint8_t *msg, uint8_t len);
 uint8_t CAN_Receive_Msg(uint8_t *buf );

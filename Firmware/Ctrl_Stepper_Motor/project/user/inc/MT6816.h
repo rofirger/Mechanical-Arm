@@ -39,4 +39,5 @@ void MT6816_SetZero();
 uint16_t MT6816_SendRead16bits(uint16_t send_data);
 bool MT6816_ReadAngle(MT6816_Structure* mt6816_structure);
 void MT6816_SpiTransfer16Bits (spi_index_enum spi_n, uint16 *write_buffer, uint16 *read_buffer, uint32 len);
+void InitPos();
 #endif /* MT6816_H_ */

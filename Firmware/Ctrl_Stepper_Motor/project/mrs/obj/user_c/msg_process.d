@@ -1,8 +1,6 @@
-user_c/main.o: \
- D:/projects/mechanical_arm/Firmware/Ctrl_Stepper_Motor/project/user/src/main.c \
- D:\projects\mechanical_arm\Firmware\Ctrl_Stepper_Motor\project\user\inc/Motor.h \
- D:\projects\mechanical_arm\Firmware\Ctrl_Stepper_Motor\project\user\inc/MT6816.h \
- D:\projects\mechanical_arm\Firmware\Ctrl_Stepper_Motor\libraries\zf_common/zf_common_headfile.h \
+user_c/msg_process.o: \
+ D:/projects/mechanical_arm/Firmware/Ctrl_Stepper_Motor/project/user/src/msg_process.c \
+ D:\projects\mechanical_arm\Firmware\Ctrl_Stepper_Motor\project\user\inc/headfile.h \
  D:\projects\mechanical_arm\Firmware\Ctrl_Stepper_Motor\libraries\sdk\Peripheral/ch32v30x_adc.h \
  D:\projects\mechanical_arm\Firmware\Ctrl_Stepper_Motor\libraries\sdk\Peripheral/ch32v30x.h \
  D:\projects\mechanical_arm\Firmware\Ctrl_Stepper_Motor\libraries\sdk\Core/core_riscv.h \
@@ -28,6 +26,11 @@ user_c/main.o: \
  D:\projects\mechanical_arm\Firmware\Ctrl_Stepper_Motor\libraries\sdk\Peripheral/ch32v30x_usart.h \
  D:\projects\mechanical_arm\Firmware\Ctrl_Stepper_Motor\libraries\sdk\Peripheral/ch32v30x_wwdg.h \
  D:\projects\mechanical_arm\Firmware\Ctrl_Stepper_Motor\libraries\sdk\Peripheral/ch32v30x_misc.h \
+ D:\projects\mechanical_arm\Firmware\Ctrl_Stepper_Motor\project\user\inc/msg_process.h \
+ D:\projects\mechanical_arm\Firmware\Ctrl_Stepper_Motor\project\user\inc/MyCan.h \
+ D:\projects\mechanical_arm\Firmware\Ctrl_Stepper_Motor\project\user\inc/headfile.h \
+ D:\projects\mechanical_arm\Firmware\Ctrl_Stepper_Motor\project\user\inc/MT6816.h \
+ D:\projects\mechanical_arm\Firmware\Ctrl_Stepper_Motor\libraries\zf_common/zf_common_headfile.h \
  D:\projects\mechanical_arm\Firmware\Ctrl_Stepper_Motor\libraries\zf_common/zf_common_clock.h \
  D:\projects\mechanical_arm\Firmware\Ctrl_Stepper_Motor\libraries\sdk\Peripheral/ch32v30x.h \
  D:\projects\mechanical_arm\Firmware\Ctrl_Stepper_Motor\libraries\zf_common/zf_common_typedef.h \
@@ -76,17 +79,11 @@ user_c/main.o: \
  D:\projects\mechanical_arm\Firmware\Ctrl_Stepper_Motor\libraries\zf_device/zf_device_bluetooth_ch9141.h \
  D:\projects\mechanical_arm\Firmware\Ctrl_Stepper_Motor\libraries\zf_device/zf_device_wireless_ch573.h \
  D:\projects\mechanical_arm\Firmware\Ctrl_Stepper_Motor\libraries\zf_device/zf_device_virtual_oscilloscope.h \
- D:\projects\mechanical_arm\Firmware\Ctrl_Stepper_Motor\project\user\inc/MyCan.h \
- D:\projects\mechanical_arm\Firmware\Ctrl_Stepper_Motor\project\user\inc/headfile.h \
- D:\projects\mechanical_arm\Firmware\Ctrl_Stepper_Motor\project\user\inc/headfile.h \
- D:\projects\mechanical_arm\Firmware\Ctrl_Stepper_Motor\project\user\inc/MyCan.h \
- D:\projects\mechanical_arm\Firmware\Ctrl_Stepper_Motor\project\user\inc/msg_process.h
+ D:\projects\mechanical_arm\Firmware\Ctrl_Stepper_Motor\project\user\inc/Motor.h \
+ D:\projects\mechanical_arm\Firmware\Ctrl_Stepper_Motor\project\user\inc/MT6816.h \
+ D:\projects\mechanical_arm\Firmware\Ctrl_Stepper_Motor\project\user\inc/MyCan.h
 
-D:\projects\mechanical_arm\Firmware\Ctrl_Stepper_Motor\project\user\inc/Motor.h:
-
-D:\projects\mechanical_arm\Firmware\Ctrl_Stepper_Motor\project\user\inc/MT6816.h:
-
-D:\projects\mechanical_arm\Firmware\Ctrl_Stepper_Motor\libraries\zf_common/zf_common_headfile.h:
+D:\projects\mechanical_arm\Firmware\Ctrl_Stepper_Motor\project\user\inc/headfile.h:
 
 D:\projects\mechanical_arm\Firmware\Ctrl_Stepper_Motor\libraries\sdk\Peripheral/ch32v30x_adc.h:
 
@@ -137,6 +134,16 @@ D:\projects\mechanical_arm\Firmware\Ctrl_Stepper_Motor\libraries\sdk\Peripheral/
 D:\projects\mechanical_arm\Firmware\Ctrl_Stepper_Motor\libraries\sdk\Peripheral/ch32v30x_wwdg.h:
 
 D:\projects\mechanical_arm\Firmware\Ctrl_Stepper_Motor\libraries\sdk\Peripheral/ch32v30x_misc.h:
+
+D:\projects\mechanical_arm\Firmware\Ctrl_Stepper_Motor\project\user\inc/msg_process.h:
+
+D:\projects\mechanical_arm\Firmware\Ctrl_Stepper_Motor\project\user\inc/MyCan.h:
+
+D:\projects\mechanical_arm\Firmware\Ctrl_Stepper_Motor\project\user\inc/headfile.h:
+
+D:\projects\mechanical_arm\Firmware\Ctrl_Stepper_Motor\project\user\inc/MT6816.h:
+
+D:\projects\mechanical_arm\Firmware\Ctrl_Stepper_Motor\libraries\zf_common/zf_common_headfile.h:
 
 D:\projects\mechanical_arm\Firmware\Ctrl_Stepper_Motor\libraries\zf_common/zf_common_clock.h:
 
@@ -234,12 +241,8 @@ D:\projects\mechanical_arm\Firmware\Ctrl_Stepper_Motor\libraries\zf_device/zf_de
 
 D:\projects\mechanical_arm\Firmware\Ctrl_Stepper_Motor\libraries\zf_device/zf_device_virtual_oscilloscope.h:
 
-D:\projects\mechanical_arm\Firmware\Ctrl_Stepper_Motor\project\user\inc/MyCan.h:
+D:\projects\mechanical_arm\Firmware\Ctrl_Stepper_Motor\project\user\inc/Motor.h:
 
-D:\projects\mechanical_arm\Firmware\Ctrl_Stepper_Motor\project\user\inc/headfile.h:
-
-D:\projects\mechanical_arm\Firmware\Ctrl_Stepper_Motor\project\user\inc/headfile.h:
+D:\projects\mechanical_arm\Firmware\Ctrl_Stepper_Motor\project\user\inc/MT6816.h:
 
 D:\projects\mechanical_arm\Firmware\Ctrl_Stepper_Motor\project\user\inc/MyCan.h:
-
-D:\projects\mechanical_arm\Firmware\Ctrl_Stepper_Motor\project\user\inc/msg_process.h:

@@ -1,7 +1,7 @@
 user_c/msg_process.o: \
  D:/projects/mechanical_arm/Firmware/ArmMainControler/project/user/src/msg_process.c \
  D:\projects\mechanical_arm\Firmware\ArmMainControler\project\user\inc/msg_process.h \
- D:\projects\mechanical_arm\Firmware\ArmMainControler\libraries\zf_common/zf_common_headfile.h \
+ D:\projects\mechanical_arm\Firmware\ArmMainControler\project\user\inc/headfile.h \
  D:\projects\mechanical_arm\Firmware\ArmMainControler\libraries\sdk\Peripheral/ch32v30x_adc.h \
  D:\projects\mechanical_arm\Firmware\ArmMainControler\libraries\sdk\Peripheral/ch32v30x.h \
  D:\projects\mechanical_arm\Firmware\ArmMainControler\libraries\sdk\Core/core_riscv.h \
@@ -27,6 +27,12 @@ user_c/msg_process.o: \
  D:\projects\mechanical_arm\Firmware\ArmMainControler\libraries\sdk\Peripheral/ch32v30x_usart.h \
  D:\projects\mechanical_arm\Firmware\ArmMainControler\libraries\sdk\Peripheral/ch32v30x_wwdg.h \
  D:\projects\mechanical_arm\Firmware\ArmMainControler\libraries\sdk\Peripheral/ch32v30x_misc.h \
+ D:\projects\mechanical_arm\Firmware\ArmMainControler\project\user\inc/MyCan.h \
+ D:\projects\mechanical_arm\Firmware\ArmMainControler\project\user\inc/Config.h \
+ D:\projects\mechanical_arm\Firmware\ArmMainControler\NetLib/WCHNET.h \
+ D:\projects\mechanical_arm\Firmware\ArmMainControler\libraries\sdk\Peripheral/ch32v30x_eth.h \
+ D:\projects\mechanical_arm\Firmware\ArmMainControler\project\user\inc/ETH.h \
+ D:\projects\mechanical_arm\Firmware\ArmMainControler\libraries\zf_common/zf_common_headfile.h \
  D:\projects\mechanical_arm\Firmware\ArmMainControler\libraries\zf_common/zf_common_clock.h \
  D:\projects\mechanical_arm\Firmware\ArmMainControler\libraries\sdk\Peripheral/ch32v30x.h \
  D:\projects\mechanical_arm\Firmware\ArmMainControler\libraries\zf_common/zf_common_typedef.h \
@@ -75,15 +81,13 @@ user_c/msg_process.o: \
  D:\projects\mechanical_arm\Firmware\ArmMainControler\libraries\zf_device/zf_device_bluetooth_ch9141.h \
  D:\projects\mechanical_arm\Firmware\ArmMainControler\libraries\zf_device/zf_device_wireless_ch573.h \
  D:\projects\mechanical_arm\Firmware\ArmMainControler\libraries\zf_device/zf_device_virtual_oscilloscope.h \
- D:\projects\mechanical_arm\Firmware\ArmMainControler\project\user\inc/MyCan.h \
- D:\projects\mechanical_arm\Firmware\ArmMainControler\project\user\inc/Config.h \
- D:\projects\mechanical_arm\Firmware\ArmMainControler\NetLib/WCHNET.h \
- D:\projects\mechanical_arm\Firmware\ArmMainControler\libraries\sdk\Peripheral/ch32v30x_eth.h \
- D:\projects\mechanical_arm\Firmware\ArmMainControler\project\user\inc/ETH.h
+ D:\projects\mechanical_arm\Firmware\ArmMainControler\project\user\inc/arm_kinematic.h \
+ D:\projects\mechanical_arm\Firmware\ArmMainControler\project\user\inc/joint.h \
+ D:\projects\mechanical_arm\Firmware\ArmMainControler\project\user\inc/arm_kinematic.h
 
 D:\projects\mechanical_arm\Firmware\ArmMainControler\project\user\inc/msg_process.h:
 
-D:\projects\mechanical_arm\Firmware\ArmMainControler\libraries\zf_common/zf_common_headfile.h:
+D:\projects\mechanical_arm\Firmware\ArmMainControler\project\user\inc/headfile.h:
 
 D:\projects\mechanical_arm\Firmware\ArmMainControler\libraries\sdk\Peripheral/ch32v30x_adc.h:
 
@@ -134,6 +138,18 @@ D:\projects\mechanical_arm\Firmware\ArmMainControler\libraries\sdk\Peripheral/ch
 D:\projects\mechanical_arm\Firmware\ArmMainControler\libraries\sdk\Peripheral/ch32v30x_wwdg.h:
 
 D:\projects\mechanical_arm\Firmware\ArmMainControler\libraries\sdk\Peripheral/ch32v30x_misc.h:
+
+D:\projects\mechanical_arm\Firmware\ArmMainControler\project\user\inc/MyCan.h:
+
+D:\projects\mechanical_arm\Firmware\ArmMainControler\project\user\inc/Config.h:
+
+D:\projects\mechanical_arm\Firmware\ArmMainControler\NetLib/WCHNET.h:
+
+D:\projects\mechanical_arm\Firmware\ArmMainControler\libraries\sdk\Peripheral/ch32v30x_eth.h:
+
+D:\projects\mechanical_arm\Firmware\ArmMainControler\project\user\inc/ETH.h:
+
+D:\projects\mechanical_arm\Firmware\ArmMainControler\libraries\zf_common/zf_common_headfile.h:
 
 D:\projects\mechanical_arm\Firmware\ArmMainControler\libraries\zf_common/zf_common_clock.h:
 
@@ -231,12 +247,8 @@ D:\projects\mechanical_arm\Firmware\ArmMainControler\libraries\zf_device/zf_devi
 
 D:\projects\mechanical_arm\Firmware\ArmMainControler\libraries\zf_device/zf_device_virtual_oscilloscope.h:
 
-D:\projects\mechanical_arm\Firmware\ArmMainControler\project\user\inc/MyCan.h:
+D:\projects\mechanical_arm\Firmware\ArmMainControler\project\user\inc/arm_kinematic.h:
 
-D:\projects\mechanical_arm\Firmware\ArmMainControler\project\user\inc/Config.h:
+D:\projects\mechanical_arm\Firmware\ArmMainControler\project\user\inc/joint.h:
 
-D:\projects\mechanical_arm\Firmware\ArmMainControler\NetLib/WCHNET.h:
-
-D:\projects\mechanical_arm\Firmware\ArmMainControler\libraries\sdk\Peripheral/ch32v30x_eth.h:
-
-D:\projects\mechanical_arm\Firmware\ArmMainControler\project\user\inc/ETH.h:
+D:\projects\mechanical_arm\Firmware\ArmMainControler\project\user\inc/arm_kinematic.h:

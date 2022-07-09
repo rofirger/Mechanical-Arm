@@ -4,10 +4,16 @@
  *  Created on: Jun 21, 2022
  *      Author: 随风
  */
+
+/*
+ * @note:关于MounRiver Studio环境下的数学库math.h的使用, 在GNU RISC-V Cross C Linker下的Libraries(-l)下添加  m
+ */
+
 #include "arm_kinematic.h"
-#include "math.h"
 #include "Config.h"
-#include "zf_common_headfile.h"
+#include "headfile.h"
+#include "joint.h"
+#include "math.h"
 
 // 连杆参数表
 const float link_parameter[6][4] = {
@@ -19,14 +25,27 @@ const float link_parameter[6][4] = {
         {-PI_2, 0, DH_R4_R5_L, 0},
 };
 
-// 当前机械臂末端的欧拉位置
-float EulerPosNow[6];
-// 新目标机械臂末端的欧拉位置
-float EulerPosNew[6];
+// 机械臂pieper末端到实际末端变换矩阵
+float PiePerTranforMat[16] = { 1, 0, 0, 0,
+                               0, 1, 0, 0,
+                               0, 0, 1, DH_R4_R5_L,
+                               0, 0, 0, 1};
+// 机械臂实际末端到pieper末端的变换矩阵
+float PosePieperTranformMat[16] = { 1, 0, 0, 0,
+                                    0, 1, 0, 0,
+                                    0, 0, 1, -DH_R4_R5_L,
+                                    0, 0, 0, 1};
+
+// 当前机械臂末端的欧拉位置, 前三个代表相对零点坐标，后三个代表相对原点X-Y-Z固定角旋转角
+extern float EulerPosNow[6];
+// 新目标机械臂末端的欧拉位置, 前三个代表相对零点坐标，后三个代表相对原点X-Y-Z固定角旋转角
+extern float EulerPosNew[6];
 // 当前机械臂关节的旋转角
-float JointRotationNow[6];
+extern float JointRotationNow[6];
 // 目标机械臂关节旋转角
-float JointRotationNew[6];
+extern float JointRotationNew[6];
+// 逆解集合
+IK_AngleSolve IK_Angles;
 
 /*
  * @brief:角度换算弧度
@@ -37,12 +56,20 @@ inline float DegToRad(const float _deg)
 }
 
 /*
+ * @brief:弧度换算角度
+ */
+inline float RadToDeg(const float _rad)
+{
+    return _rad * RAD_TO_DEG;
+}
+
+/*
  * @brief:     根据连杆参数求连杆变换矩阵
- * @param:     _link_param[const float*]  6*4连杆参数表;       _out_transform_mat[float*]  6连杆变换矩阵
+ * @param:     _link_param  6*4连杆参数表;       _out_transform_mat  6连杆变换矩阵
  */
 void LinkToTransformMat(const float* _link_param, float* _out_transform_mat)
 {
-    for (uint8_t _i = 0; _i < 6; ++_i)
+    for (int _i = 0; _i < 6; ++_i)
     {
         _out_transform_mat[_i * 4 + 0] = cos(_link_param[_i * 4 + 3]);
         _out_transform_mat[_i * 4 + 1] = -sin(_link_param[_i * 4 + 3]);
@@ -86,6 +113,17 @@ void MatMultiply(const float* _matrix_a, const float* _matrix_b, float* _matrix_
     }
 }
 
+void MatTranspose(const float* _matrix_in, const int _row, const int _col, float* _matrix_out)
+{
+    for (int _i = 0; _i < _row; ++_i)
+    {
+        for (int _j = 0; _j < _col; ++_j)
+        {
+            _matrix_out[_i * _col + _j] = _matrix_in[_j * _col + _i];
+        }
+    }
+}
+
 /*
  * @brief:根据旋转矩阵求X-Y—Z固定旋转角
  */
@@ -94,7 +132,7 @@ void RotationMatToEulerAngle(const float* _rot_mat, float* _euler_angle)
     // 分情况讨论
     if (fabsf(_rot_mat[6]) > 1 - 0.0001)    // 等于1
     {
-        if(_rot_mat[6] < 0)
+        if (_rot_mat[6] < 0)
         {
             _euler_angle[0] = 0;
             _euler_angle[1] = PI_2;
@@ -108,7 +146,7 @@ void RotationMatToEulerAngle(const float* _rot_mat, float* _euler_angle)
         }
         return;
     }
-    _euler_angle[1] = atan2f(-_rot_mat[6], sqrt(_rot_mat[0] * _rot_mat[0] + _rot_mat[3] * _rot_mat[3]));
+    _euler_angle[1] = atan2f(-_rot_mat[6], sqrtf(_rot_mat[0] * _rot_mat[0] + _rot_mat[3] * _rot_mat[3]));
     float temp = cosf(_euler_angle[1]);
     _euler_angle[0] = atan2f(_rot_mat[3] / temp, _rot_mat[0] / temp);
     _euler_angle[2] = atan2f(_rot_mat[7] / temp, _rot_mat[8] / temp);
@@ -157,9 +195,9 @@ void EulerPosToTranformMat(const float* _euler_pos, float* _trans_mat)
     float ca = cosf(_euler_pos[3]);
     float sa = sinf(_euler_pos[3]);
     float cb = cosf(_euler_pos[4]);
-    float sb = cosf(_euler_pos[4]);
+    float sb = sinf(_euler_pos[4]);
     float cr = cosf(_euler_pos[5]);
-    float sr = cosf(_euler_pos[5]);
+    float sr = sinf(_euler_pos[5]);
 
     _trans_mat[0] = ca * cb;
     _trans_mat[1] = ca * sb * sr - sa * cr;
@@ -245,23 +283,28 @@ void RobotFK(const float* _joint_rotation, float* _output_joint_six_param)
  * @brief:运动学逆解
  * @param:  _joint_rotation[const float*]:末端目标点相对原点的变换矩阵                _output_solve[IK_AngleSlove*]:未经选择的六轴角度解
  */
-bool RobotIK(const float* _joint_rotation, IK_AngleSlove* _output_solve, const float* _last_joint)
+bool RobotIK(const float* _joint_rotation, IK_AngleSolve* _output_solve, const float* _last_joint)
 {
     /*
     * 此机械臂一般存在 8 个逆解。具体请看代码分析
     */
-    float _joint3[4] = { -6666.66 ,-6666.66 ,-6666.66 ,-6666.66 };
+    float* _joint3 = _output_solve->_joint3;
     unsigned char _joint3_solve_num = 0;
-    float _joint2[8] = { -6666.66 ,-6666.66 ,-6666.66 ,-6666.66 , -6666.66 ,-6666.66 ,-6666.66 ,-6666.66 };
-    unsigned char _joint2_solve_num = 0;
-    float _joint1[8] = { -6666.66 ,-6666.66 ,-6666.66 ,-6666.66 , -6666.66 ,-6666.66 ,-6666.66 ,-6666.66 };
-    unsigned char _joint1_solve_num = 0;
-    float _joint4[8] = { -6666.66 ,-6666.66 ,-6666.66 ,-6666.66 , -6666.66 ,-6666.66 ,-6666.66 ,-6666.66 };
-    unsigned char _joint4_solve_num = 0;
-    float _joint5[8] = { -6666.66 ,-6666.66 ,-6666.66 ,-6666.66 , -6666.66 ,-6666.66 ,-6666.66 ,-6666.66 };
-    unsigned char _joint5_solve_num = 0;
-    float _joint6[8] = { -6666.66 ,-6666.66 ,-6666.66 ,-6666.66 , -6666.66 ,-6666.66 ,-6666.66 ,-6666.66 };
-    unsigned char _joint6_solve_num = 0;
+    float* _joint1 = _output_solve->_joint1;
+    float* _joint2 = _output_solve->_joint2;
+    float* _joint4 = _output_solve->_joint4;
+    float* _joint5 = _output_solve->_joint5;
+    float* _joint6 = _output_solve->_joint6;
+    for(uint8_t _i = 0; _i < 8; ++_i)
+    {
+        if (_i < 4)
+            _joint3[_i] =  -6666.66;
+        _joint1[_i] =  -6666.66;
+        _joint2[_i] =  -6666.66;
+        _joint4[_i] =  -6666.66;
+        _joint5[_i] =  -6666.66;
+        _joint6[_i] =  -6666.66;
+    }
 
     float _x = _joint_rotation[3];
     float _y = _joint_rotation[7];
@@ -334,7 +377,7 @@ bool RobotIK(const float* _joint_rotation, IK_AngleSlove* _output_solve, const f
                         _joint3_tmp[_j] = -6666.66;
                 }
             }
-
+            _output_solve->_num_joint3_solve = _joint3_solve_num;
             // 解joint2
             for (unsigned char _i = 0; _i < _joint3_solve_num; ++_i)
             {
@@ -353,7 +396,6 @@ bool RobotIK(const float* _joint_rotation, IK_AngleSlove* _output_solve, const f
                     float _joint2_solve_2 = 2 * atanf(_u2_solve_2);
                     _joint2[_i * 2] = _joint2_solve_1;
                     _joint2[_i * 2 + 1] = _joint2_solve_2;
-                    _joint2_solve_num += 2;
                 }
             }
             // 暂不消重
@@ -435,4 +477,199 @@ bool RobotIK(const float* _joint_rotation, IK_AngleSlove* _output_solve, const f
         return false;
     }
     return true;
+}
+
+/*
+ * @brief:检查所得到的关节关于运动学平衡的旋转角度是否在可达范围内
+ */
+bool CheckSolveAvailable(const float _joint_rad, const uint8_t _joint_index)
+{
+    float _joint_angle = RadToDeg(_joint_rad);
+    switch (_joint_index)
+    {
+    case 0:
+    case 3:
+    case 5:
+    {
+        return true;
+    }
+    case 1:
+    {
+        if (_joint_angle >= JOINT2_MIN_KINEMATICS_ANGLE && _joint_angle <= JOINT2_MAX_KINEMATICS_ANGLE)
+            return true;
+        break;
+    }
+    case 2:
+    {
+        if (_joint_angle >= JOINT3_MIN_KINEMATICS_ANGLE && _joint_angle <= JOINT4_MAX_KINEMATICS_ANGLE)
+            return true;
+        break;
+    }
+    case 4:
+    {
+        if (_joint_angle >= JOINT5_MIN_KINEMATICS_ANGLE && _joint_angle <= JOINT5_MAX_KINEMATICS_ANGLE)
+            return true;
+        break;
+    }
+    }
+    return false;
+}
+
+void JointAngleToRad(const float* _in_joint_angle, float* _out_joint_rad)
+{
+    for (uint8_t _i = 0; _i < 6; ++_i)
+    {
+        _out_joint_rad[_i] = DegToRad(_in_joint_angle[_i]);
+    }
+}
+
+void JointRadToAngle(const float* _in_joint_rad, float* _out_joint_angle)
+{
+    for (uint8_t _i = 0; _i < 6; ++_i)
+    {
+        _out_joint_angle[_i] = RadToDeg(_in_joint_rad[_i]);
+    }
+}
+
+/*
+ * @param:  _euler_pos[const float*]:前三个代表相对零点坐标，后三个代表相对原点X-Y-Z固定角旋转角(弧度)           _joint_angles[float*]:输出机械臂六个轴旋转角度
+ */
+bool EulerPosToJointAngle(const float* _euler_pos, float* _joint_angles)
+{
+    float _tmp_joint_transform_mat[16];
+    float _joint_transform_mat[16];
+    bool _exit_solve[8];
+    memset(_exit_solve, false, 8);
+    EulerPosToTranformMat(_euler_pos, _tmp_joint_transform_mat);
+    MatMultiply(_tmp_joint_transform_mat, PosePieperTranformMat, _joint_transform_mat, 4, 4, 4);
+    float _joint_rad_rotation_now[6];
+    JointAngleToRad(JointRotationNow, _joint_rad_rotation_now);
+    bool _is_exit_solve = RobotIK(_joint_transform_mat, &IK_Angles, _joint_rad_rotation_now);
+    if (_is_exit_solve)
+    {
+        uint8_t _num = IK_Angles._num_joint3_solve * 2;
+        uint8_t _num_available_solve = 0;
+        for (uint8_t _i = 0; _i < _num; ++_i)
+        {
+            if (fabsf(IK_Angles._joint6[_i] + 6666.66) > 6000)
+            {
+                _num_available_solve++;
+                _exit_solve[_i] = true;
+                if (false == CheckSolveAvailable(IK_Angles._joint6[_i], 5))
+                {
+                    _exit_solve[_i] = false;
+                    _num_available_solve--;
+                    continue;
+                }
+                if (false == CheckSolveAvailable(IK_Angles._joint5[_i], 4))
+                {
+                    _exit_solve[_i] = false;
+                    _num_available_solve--;
+                    continue;
+                }
+                if (false == CheckSolveAvailable(IK_Angles._joint4[_i], 3))
+                {
+                    _exit_solve[_i] = false;
+                    _num_available_solve--;
+                    continue;
+                }
+                if (false == CheckSolveAvailable(IK_Angles._joint1[_i], 0))
+                {
+                    _exit_solve[_i] = false;
+                    _num_available_solve--;
+                    continue;
+                }
+                if (false == CheckSolveAvailable(IK_Angles._joint2[_i], 1))
+                {
+                    _exit_solve[_i] = false;
+                    _num_available_solve--;
+                    continue;
+                }
+                if (false == CheckSolveAvailable(IK_Angles._joint3[_i / 2], 2))
+                {
+                    _exit_solve[_i] = false;
+                    _num_available_solve--;
+                    continue;
+                }
+            }
+        }
+        if (_num_available_solve == 0)
+        {
+            uint8_t _eth_err_msg_len = 12;
+            const char* _eth_err_msg = "NO SOLUTION!";
+            WCHNET_SocketSend((uint8_t)0, _eth_err_msg, &_eth_err_msg_len);
+            return false;
+        }
+        bool _is_available_for_joint2[8];
+        uint8_t _num_available_for_joint2 = 0;
+        memset(_is_available_for_joint2, false, 8);
+        // 优先搜索更符合的joint2旋转
+        for (uint8_t _i = 0; _i < _num; ++_i)
+        {
+            if (true == _exit_solve[_i])
+            {
+                if (JointRotationNow[1] <= 90)
+                {
+                    float _tmp_angle = RadToDeg(IK_Angles._joint2[_i]);
+                    if (_tmp_angle <= 90)
+                    {
+                        _is_available_for_joint2[_i] = true;
+                        _num_available_for_joint2++;
+                    }
+                }
+                else {
+                    float _tmp_angle = RadToDeg(IK_Angles._joint2[_i]);
+                    if (_tmp_angle > 90)
+                    {
+                        _is_available_for_joint2[_i] = true;
+                        _num_available_for_joint2++;
+                    }
+                }
+            }
+        }
+        // 不存在更符合的joint2解
+        if (_num_available_for_joint2 == 0)
+        {
+            for (uint8_t _i = 0; _i < _num; ++_i)
+            {
+                if (true == _exit_solve[_i])
+                {
+                    _joint_angles[0] = IK_Angles._joint1[_i];
+                    _joint_angles[1] = IK_Angles._joint2[_i];
+                    _joint_angles[2] = IK_Angles._joint3[_i / 2];
+                    _joint_angles[3] = IK_Angles._joint4[_i];
+                    _joint_angles[4] = IK_Angles._joint5[_i];
+                    _joint_angles[5] = IK_Angles._joint6[_i];
+                    JointRadToAngle(_joint_angles, _joint_angles);
+                    return true;
+                }
+            }
+        }
+        else
+        {
+            // 筛选更符合要求的解
+            for (uint8_t _i = 0; _i < _num; ++_i)
+            {
+                if (true == _is_available_for_joint2[_i])
+                {
+                    _joint_angles[0] = IK_Angles._joint1[_i];
+                    _joint_angles[1] = IK_Angles._joint2[_i];
+                    _joint_angles[2] = IK_Angles._joint3[_i / 2];
+                    _joint_angles[3] = IK_Angles._joint4[_i];
+                    _joint_angles[4] = IK_Angles._joint5[_i];
+                    _joint_angles[5] = IK_Angles._joint6[_i];
+                    JointRadToAngle(_joint_angles, _joint_angles);
+                    return true;
+                }
+            }
+        }
+    }
+    else
+    {
+        uint8_t _eth_err_msg_len = 12;
+        const char* _eth_err_msg = "NO SOLUTION!";
+        WCHNET_SocketSend((uint8_t)0, _eth_err_msg, &_eth_err_msg_len);
+        return false;
+    }
+    return false;
 }

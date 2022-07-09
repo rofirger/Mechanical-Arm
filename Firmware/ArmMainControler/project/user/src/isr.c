@@ -20,6 +20,7 @@
 #include "zf_common_headfile.h"
 #include "WCHNET.h"
 #include "msg_process.h"
+#include "MyCan.h"
 
 void NMI_Handler(void)       __attribute__((interrupt("WCH-Interrupt-fast")));
 void HardFault_Handler(void) __attribute__((interrupt("WCH-Interrupt-fast")));
@@ -205,7 +206,7 @@ void EXTI3_IRQHandler(void)
     if(SET == EXTI_GetITStatus(EXTI_Line3))
     {
         EXTI_ClearITPendingBit(EXTI_Line3);
-
+        CAN_Send_Msg("STOP#", 5, JOINT_GENERAL_ID);
     }
 }
 

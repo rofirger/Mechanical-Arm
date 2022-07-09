@@ -1,6 +1,5 @@
-user_c/arm_kinematic.o: \
- D:/projects/mechanical_arm/Firmware/ArmMainControler/project/user/src/arm_kinematic.c \
- D:\projects\mechanical_arm\Firmware\ArmMainControler\project\user\inc/arm_kinematic.h \
+user_c/joint.o: \
+ D:/projects/mechanical_arm/Firmware/ArmMainControler/project/user/src/joint.c \
  D:\projects\mechanical_arm\Firmware\ArmMainControler\project\user\inc/headfile.h \
  D:\projects\mechanical_arm\Firmware\ArmMainControler\libraries\sdk\Peripheral/ch32v30x_adc.h \
  D:\projects\mechanical_arm\Firmware\ArmMainControler\libraries\sdk\Peripheral/ch32v30x.h \
@@ -27,12 +26,10 @@ user_c/arm_kinematic.o: \
  D:\projects\mechanical_arm\Firmware\ArmMainControler\libraries\sdk\Peripheral/ch32v30x_usart.h \
  D:\projects\mechanical_arm\Firmware\ArmMainControler\libraries\sdk\Peripheral/ch32v30x_wwdg.h \
  D:\projects\mechanical_arm\Firmware\ArmMainControler\libraries\sdk\Peripheral/ch32v30x_misc.h \
- D:\projects\mechanical_arm\Firmware\ArmMainControler\project\user\inc/Config.h \
- D:\projects\mechanical_arm\Firmware\ArmMainControler\project\user\inc/headfile.h \
  D:\projects\mechanical_arm\Firmware\ArmMainControler\project\user\inc/joint.h \
+ D:\projects\mechanical_arm\Firmware\ArmMainControler\project\user\inc/arm_kinematic.h \
+ D:\projects\mechanical_arm\Firmware\ArmMainControler\project\user\inc/headfile.h \
  D:\projects\mechanical_arm\Firmware\ArmMainControler\project\user\inc/arm_kinematic.h
-
-D:\projects\mechanical_arm\Firmware\ArmMainControler\project\user\inc/arm_kinematic.h:
 
 D:\projects\mechanical_arm\Firmware\ArmMainControler\project\user\inc/headfile.h:
 
@@ -86,10 +83,10 @@ D:\projects\mechanical_arm\Firmware\ArmMainControler\libraries\sdk\Peripheral/ch
 
 D:\projects\mechanical_arm\Firmware\ArmMainControler\libraries\sdk\Peripheral/ch32v30x_misc.h:
 
-D:\projects\mechanical_arm\Firmware\ArmMainControler\project\user\inc/Config.h:
+D:\projects\mechanical_arm\Firmware\ArmMainControler\project\user\inc/joint.h:
+
+D:\projects\mechanical_arm\Firmware\ArmMainControler\project\user\inc/arm_kinematic.h:
 
 D:\projects\mechanical_arm\Firmware\ArmMainControler\project\user\inc/headfile.h:
-
-D:\projects\mechanical_arm\Firmware\ArmMainControler\project\user\inc/joint.h:
 
 D:\projects\mechanical_arm\Firmware\ArmMainControler\project\user\inc/arm_kinematic.h:

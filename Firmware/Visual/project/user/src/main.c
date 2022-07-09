@@ -142,9 +142,15 @@ void ToGray()
     {
         for (uint16_t j = 0; j < src_cols; ++j)
         {
-            r = img_dvp[i][j]>>11;
-            g = (img_dvp[i][j]>>5)&0x3f;
-            b = img_dvp[i][j]&0x1f;
+            uint16 pixel;
+            //获取指定坐标的像素数据
+            pixel = img_dvp[i][j];
+            //因为R5G3是存储在低八位 G3B5是存储在高八位
+            //因为我们先将位置进行交换，便于获取每个分量的数据
+            pixel = ((pixel&0xff)<<8) |(pixel>>8);
+            r = pixel>>11;
+            g = (pixel>>5)&0x3f;
+            b = pixel&0x1f;
             binary_dvp_img[i][j] = (r*19595 + g*38469 + b*7472) >> 16;
         }
     }
@@ -169,7 +175,7 @@ void Init(void)
     pwm_init(TIM5_PWM_CH1_A0, 50, 1000);
     // FSMC_SRAM_Init();
     // 初始化UART
-    uart_init(UART_7, 57600, UART7_TX_C2, UART7_RX_C3);
+    uart_init(UART_7, 115200, UART7_TX_C2, UART7_RX_C3);
 }
 
 int main(void)
@@ -197,13 +203,13 @@ int main(void)
 
         if (dvp_img_finish_flag)
         {
-            tft180_show_rgb565_image(0, 0, img_dvp[0], ROW_TFT_WIDTH / 2, ROW_TFT_HEIGHT, ROW_TFT_WIDTH / 2, ROW_TFT_HEIGHT, 1);
+            //tft180_show_rgb565_image(0, 0, img_dvp[0], ROW_TFT_WIDTH / 2, ROW_TFT_HEIGHT, ROW_TFT_WIDTH / 2, ROW_TFT_HEIGHT, 1);
             ToGray();
             SendImgToUart((uint8_t*)binary_dvp_img, ROW_TFT_WIDTH / 2, ROW_TFT_HEIGHT);
             //GetHistGram(ROW_TFT_WIDTH / 2, ROW_TFT_HEIGHT);
             //uint8_t thredshold = OTSUThreshold();
             //BinaryzationProcess(ROW_TFT_HEIGHT, ROW_TFT_WIDTH / 2, thredshold);
-            //tft180_show_gray_image(0, 0, binary_dvp_img[0], ROW_TFT_WIDTH / 2, ROW_TFT_HEIGHT, ROW_TFT_WIDTH / 2, ROW_TFT_HEIGHT, 0);
+            tft180_show_gray_image(0, 0, binary_dvp_img[0], ROW_TFT_WIDTH / 2, ROW_TFT_HEIGHT, ROW_TFT_WIDTH / 2, ROW_TFT_HEIGHT, 0);
             //Zbar_Test(binary_dvp_img[0], ROW_TFT_WIDTH / 2, ROW_TFT_HEIGHT);
             dvp_img_finish_flag = 0;
         }

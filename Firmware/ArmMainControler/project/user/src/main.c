@@ -56,6 +56,24 @@ void KeyInit()
     // °´¼ü
     gpio_init(BUTTON1, GPI, GPIO_HIGH, GPI_PULL_UP);
     gpio_init(BUTTON2, GPI, GPIO_HIGH, GPI_PULL_UP);
+
+    // ÅäÖÃ button2Òý½ÅÖÐ¶Ï
+    EXTI_InitTypeDef EXTI_InitStructure;
+    NVIC_InitTypeDef NVIC_InitStructure;
+    GPIO_EXTILineConfig(BUTTON2_PORT_SOURCE, BUTTON2_PIN_SOURCE);
+    EXTI_InitStructure.EXTI_Line = BUTTON2_LINE;
+    EXTI_InitStructure.EXTI_Mode = EXTI_Mode_Interrupt;
+    EXTI_InitStructure.EXTI_Trigger = EXTI_Trigger_Falling;
+    EXTI_InitStructure.EXTI_LineCmd = ENABLE;
+    EXTI_Init(&EXTI_InitStructure);
+
+    NVIC_PriorityGroupConfig(NVIC_PriorityGroup_4);
+    NVIC_InitStructure.NVIC_IRQChannel = BUTTON2_IRQ;
+    NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 1;
+    NVIC_InitStructure.NVIC_IRQChannelSubPriority = 2;
+    NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
+
+    NVIC_Init(&NVIC_InitStructure);
 }
 
 void FiveKeyStatus()

@@ -74,7 +74,8 @@ user_c/MyCan.o: \
  D:\projects\mechanical_arm\Firmware\Ctrl_Stepper_Motor\libraries\zf_device/zf_device_bluetooth_ch9141.h \
  D:\projects\mechanical_arm\Firmware\Ctrl_Stepper_Motor\libraries\zf_device/zf_device_wireless_ch573.h \
  D:\projects\mechanical_arm\Firmware\Ctrl_Stepper_Motor\libraries\zf_device/zf_device_virtual_oscilloscope.h \
- D:\projects\mechanical_arm\Firmware\Ctrl_Stepper_Motor\project\user\inc/MyCan.h
+ D:\projects\mechanical_arm\Firmware\Ctrl_Stepper_Motor\project\user\inc/MyCan.h \
+ D:\projects\mechanical_arm\Firmware\Ctrl_Stepper_Motor\project\user\inc/headfile.h
 
 D:\projects\mechanical_arm\Firmware\Ctrl_Stepper_Motor\libraries\zf_common/zf_common_headfile.h:
 
@@ -225,3 +226,5 @@ D:\projects\mechanical_arm\Firmware\Ctrl_Stepper_Motor\libraries\zf_device/zf_de
 D:\projects\mechanical_arm\Firmware\Ctrl_Stepper_Motor\libraries\zf_device/zf_device_virtual_oscilloscope.h:
 
 D:\projects\mechanical_arm\Firmware\Ctrl_Stepper_Motor\project\user\inc/MyCan.h:
+
+D:\projects\mechanical_arm\Firmware\Ctrl_Stepper_Motor\project\user\inc/headfile.h:
