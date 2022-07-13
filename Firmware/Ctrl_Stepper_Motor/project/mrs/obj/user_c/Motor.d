@@ -78,7 +78,10 @@ user_c/Motor.o: \
  D:\projects\mechanical_arm\Firmware\Ctrl_Stepper_Motor\libraries\zf_device/zf_device_virtual_oscilloscope.h \
  D:\projects\mechanical_arm\Firmware\Ctrl_Stepper_Motor\project\user\inc/MyCan.h \
  D:\projects\mechanical_arm\Firmware\Ctrl_Stepper_Motor\project\user\inc/headfile.h \
- D:\projects\mechanical_arm\Firmware\Ctrl_Stepper_Motor\project\user\inc/MT6816.h
+ D:\projects\mechanical_arm\Firmware\Ctrl_Stepper_Motor\project\user\inc/MT6816.h \
+ D:\projects\mechanical_arm\Firmware\Ctrl_Stepper_Motor\project\user\inc/msg_process.h \
+ D:\projects\mechanical_arm\Firmware\Ctrl_Stepper_Motor\project\user\inc/Motor.h \
+ D:\projects\mechanical_arm\Firmware\Ctrl_Stepper_Motor\project\user\inc/MyCan.h
 
 D:\projects\mechanical_arm\Firmware\Ctrl_Stepper_Motor\project\user\inc/Motor.h:
 
@@ -237,3 +240,9 @@ D:\projects\mechanical_arm\Firmware\Ctrl_Stepper_Motor\project\user\inc/MyCan.h:
 D:\projects\mechanical_arm\Firmware\Ctrl_Stepper_Motor\project\user\inc/headfile.h:
 
 D:\projects\mechanical_arm\Firmware\Ctrl_Stepper_Motor\project\user\inc/MT6816.h:
+
+D:\projects\mechanical_arm\Firmware\Ctrl_Stepper_Motor\project\user\inc/msg_process.h:
+
+D:\projects\mechanical_arm\Firmware\Ctrl_Stepper_Motor\project\user\inc/Motor.h:
+
+D:\projects\mechanical_arm\Firmware\Ctrl_Stepper_Motor\project\user\inc/MyCan.h:

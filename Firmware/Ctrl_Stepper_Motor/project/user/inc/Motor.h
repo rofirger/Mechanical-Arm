@@ -18,9 +18,13 @@
 #define BN_STEP D13
 // 定义驱动板上的指示灯
 #define INDICATOR E2
-
+#define ABS(_num)      ((_num) >= 0 ? (_num) : (-(_num)))
 // 减速器速比
+#if (AXIS6 == 1)
+#define SPEED_RATIO         25
+#else
 #define SPEED_RATIO         26.8510
+#endif
 // 每个关节的相对与平衡(非初始化！！！)位置的可到达角度范围        注意是角度，而非弧度
 #define JOINT1_MAX_ANGLE    180.0f
 #define JOINT1_MIN_ANGLE    -180.0f
@@ -57,6 +61,8 @@
 #define JOINT6_MAX_KINEMATICS_ANGLE     JOINT6_MAX_ANGLE
 #define JOINT6_MIN_KINEMATICS_ANGLE     JOINT6_MIN_ANGLE
 
+// 反转无效编码器读数
+#define INVALID_ROTION_ENCODER  45
 
 #if (AXIS1 == 1)
 // 从上往下看，逆时针方向没有机械误差，即单方向往逆时针方向运动到此位置
@@ -65,23 +71,23 @@
 #endif
 
 #if (AXIS2 == 1)
-#define INIT_POS_ANGLE          157
-#define BALANCE_POS_ANGLE       69
+#define INIT_POS_ANGLE          280
+#define BALANCE_POS_ANGLE       213
 #endif
 
 #if (AXIS3 == 1)
-#define INIT_POS_ANGLE          320
-#define BALANCE_POS_ANGLE       28
+#define INIT_POS_ANGLE          46
+#define BALANCE_POS_ANGLE       96
 #endif
 
 #if (AXIS4 == 1)
-#define INIT_POS_ANGLE          256
-#define BALANCE_POS_ANGLE       256
+#define INIT_POS_ANGLE          225
+#define BALANCE_POS_ANGLE       225
 #endif
 
 #if (AXIS5 == 1)
-#define INIT_POS_ANGLE          108
-#define BALANCE_POS_ANGLE       108
+#define INIT_POS_ANGLE          119
+#define BALANCE_POS_ANGLE       119
 #endif
 
 #if (AXIS6 == 1)
@@ -103,8 +109,16 @@ typedef enum RotionDir
     INCREASE_ENCODER,
     DECREASE_ENCODER
 }RotionDir;
+
+typedef struct RotionStatus
+{
+    RotionDir _last_rotion_dir;
+    RotionDir _next_rotion_dir;
+}RotionStatus;
+
 void CV_MotorStep(uint16_t _times, uint16_t _ms_interval);
 void CCV_MotorStep(uint16_t _times, uint16_t _ms_interval);
 void KeepPos();
 void SetPos(const float _motor_angle);
+void ErrorCompensation(const int _now_offset_balance, int* _target_offset_balance);
 #endif /* MOTOR_H_ */

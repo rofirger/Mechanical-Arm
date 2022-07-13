@@ -12,6 +12,7 @@ RM := rm -rf
 -include zf_device/subdir.mk
 -include zf_common/subdir.mk
 -include user_c/subdir.mk
+-include soft_compoment/subdir.mk
 -include sdk/Startup/subdir.mk
 -include sdk/Peripheral/subdir.mk
 -include sdk/Core/subdir.mk

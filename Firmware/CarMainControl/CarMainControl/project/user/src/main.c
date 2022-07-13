@@ -89,7 +89,7 @@ int main(void)
     debug_init();                           // 务必保留，本函数用于初始化MPU 时钟 调试串口
     Init();
     interrupt_global_enable();              // 总中断最后开启
-    gpio_set_level(MOTOR_EN, 1);            //驱动板使能
+    //gpio_set_level(MOTOR_EN, 1);            //驱动板使能
     tft180_show_string(0, 0, "HELLO WORLD!");
 
     angle = 90;

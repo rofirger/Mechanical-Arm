@@ -3,10 +3,16 @@
 #include "dvp.h"
 #include "ov.h"
 #include "sram.h"
+#include "img_process.h"
+
+const uint16_t img_height = ROW_TFT_HEIGHT;
+const uint16_t img_width = ROW_TFT_WIDTH / 2;
 
 uint8_t dvp_img_finish_flag = 0;
 extern __aligned(4) uint16 img_dvp[ROW_TFT_HEIGHT][ROW_TFT_WIDTH / 2];
-uint8_t binary_dvp_img[ROW_TFT_HEIGHT][ROW_TFT_WIDTH / 2];
+uint8_t red_binary_dvp_img[ROW_TFT_HEIGHT][ROW_TFT_WIDTH / 2];
+
+extern RedLinePos red_line_pos[10];
 // 直方图
 short hist_gram[256];
 
@@ -137,8 +143,8 @@ void BinaryzationProcess (int rows, int cols, unsigned int threshold_value)
 void ToGray()
 {
     uint32_t r, g, b;
-    uint16_t src_cols = ROW_TFT_WIDTH / 2;
-    for (uint16_t i = 0; i < ROW_TFT_HEIGHT; i++)
+    uint16_t src_cols = img_width;
+    for (uint16_t i = 0; i < img_height; i++)
     {
         for (uint16_t j = 0; j < src_cols; ++j)
         {
@@ -184,7 +190,6 @@ int main(void)
     Config_Flash_SRAM(FLASH_256_SRAM_64);
     clock_init(SYSTEM_CLOCK_144M);          // 务必保留，设置系统时钟。
     debug_init();                           // 务必保留，本函数用于初始化MPU 时钟 调试串口
-    //NVIC_PriorityGroupConfig(NVIC_PriorityGroup_4);
     Init();
     interrupt_global_enable();              // 总中断最后开启
     while (OV2640_Init())
@@ -203,22 +208,22 @@ int main(void)
 
         if (dvp_img_finish_flag)
         {
-            //tft180_show_rgb565_image(0, 0, img_dvp[0], ROW_TFT_WIDTH / 2, ROW_TFT_HEIGHT, ROW_TFT_WIDTH / 2, ROW_TFT_HEIGHT, 1);
-            ToGray();
-            SendImgToUart((uint8_t*)binary_dvp_img, ROW_TFT_WIDTH / 2, ROW_TFT_HEIGHT);
-            //GetHistGram(ROW_TFT_WIDTH / 2, ROW_TFT_HEIGHT);
+
+            SeekRed(red_line_pos, img_dvp[0], img_width, img_height, (uint8_t*)red_binary_dvp_img);
+            int16_t ret = SeekRedLine((uint8_t*)red_binary_dvp_img, img_width, img_height);
+            tft180_show_int(0, 0, ret, 3);
+            //tft180_show_rgb565_image(0, 0, img_dvp[0], img_width, img_height, img_width, img_height, 1);
+            //ToGray();
+            //SendImgToUart((uint8_t*)red_binary_dvp_img, img_width, img_height);
+            //GetHistGram(img_width, img_height);
             //uint8_t thredshold = OTSUThreshold();
-            //BinaryzationProcess(ROW_TFT_HEIGHT, ROW_TFT_WIDTH / 2, thredshold);
-            tft180_show_gray_image(0, 0, binary_dvp_img[0], ROW_TFT_WIDTH / 2, ROW_TFT_HEIGHT, ROW_TFT_WIDTH / 2, ROW_TFT_HEIGHT, 0);
-            //Zbar_Test(binary_dvp_img[0], ROW_TFT_WIDTH / 2, ROW_TFT_HEIGHT);
+            //BinaryzationProcess(ROW_TFT_HEIGHT, img_width, 20);
+            tft180_show_gray_image(0, 0, red_binary_dvp_img[0], img_width, img_height, img_width, img_height, 0);
+            //Zbar_Test(binary_dvp_img[0], img_width, img_height);
+            //tft180_show_string(0, 0, "hello world!");
             dvp_img_finish_flag = 0;
         }
         system_delay_ms(2);
-        //px = CAN_Receive_Msg((char*)pxbuf);
-        //if( px )
-        //{
-          //  tft180_show_string(0, 0, pxbuf);
-        //}
     }
 }
 

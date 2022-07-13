@@ -121,7 +121,7 @@ void CAN_Mode_Init(uint8_t tsjw, uint8_t tbs2, uint8_t tbs1, uint16_t brp, uint8
 /* identifier list mode, Two 16-bit filters, StdId: 0x317,0x316,0x315,0x314 */
   CAN_FilterInitSturcture.CAN_FilterMode = CAN_FilterMode_IdList;
   CAN_FilterInitSturcture.CAN_FilterScale = CAN_FilterScale_16bit;
-  CAN_FilterInitSturcture.CAN_FilterIdHigh = MAIN_CONTROLER_FILTER_ID_D;
+  CAN_FilterInitSturcture.CAN_FilterIdHigh = JOINT_GENERAL_ID;
   CAN_FilterInitSturcture.CAN_FilterIdLow = MAIN_CONTROLER_FILTER_ID_C;
   CAN_FilterInitSturcture.CAN_FilterMaskIdHigh = MAIN_CONTROLER_FILTER_ID_B;
   CAN_FilterInitSturcture.CAN_FilterMaskIdLow = MAIN_CONTROLER_FILTER_ID_A;

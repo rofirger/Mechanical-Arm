@@ -18,4 +18,8 @@
 void ETH_MsgProcess(char* _eth_msg);
 void CAN_MsgProcess(char* _joint_msg);
 void InitRobot(void);
+void BackRobot(void);
+void WakeRobot(void);
+void StartUart();
+void CloseUart();
 #endif /* MSG_PROCESS_H_ */

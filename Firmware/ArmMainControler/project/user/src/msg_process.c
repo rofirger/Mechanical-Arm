@@ -26,12 +26,15 @@ extern float EulerPosNew[6];
 extern float JointRotationNow[6];
 // 目标机械臂关节旋转角
 extern float JointRotationNew[6];
+extern bool is_open_wifi_uart;
+
 /*
  * @brief:ETH消息处理
  * @note: Joint2:CCW往上
  */
 void ETH_MsgProcess(char* _eth_msg)
 {
+
     char* _main_msg = strtok(_eth_msg, "#");        // 命令结束分隔符
     if (_main_msg)
     {
@@ -42,6 +45,18 @@ void ETH_MsgProcess(char* _eth_msg)
         else if (strcmp(_main_msg, "BACK ROBOT") == 0)
         {
             BackRobot();
+        }
+        else if (strcmp(_main_msg, "WAKE ROBOT") == 0)
+        {
+            WakeRobot();
+        }
+        else if (strcmp(_main_msg, "START UART") == 0)
+        {
+            StartUart();
+        }
+        else if (strcmp(_main_msg, "CLOSE UART") == 0)
+        {
+            CloseUart();
         }
     }
     char* _head_cmd = strtok(_main_msg, " ");
@@ -136,6 +151,7 @@ void ETH_MsgProcess(char* _eth_msg)
  */
 void CAN_MsgProcess(char* _can_msg)
 {
+    tft180_show_string(0, 90, _can_msg);
     char* _main_msg = strtok(_can_msg, "#");        // 命令结束分隔符
     char* _head_cmd = strtok(_main_msg, " ");
     if (_head_cmd)
@@ -202,4 +218,19 @@ void InitRobot(void)
 void BackRobot(void)
 {
     CAN_Send_Msg("BACK#", 5, JOINT_GENERAL_ID >> 5);
+}
+
+void WakeRobot(void)
+{
+    CAN_Send_Msg("WAKE#", 5, JOINT_GENERAL_ID >> 5);
+}
+
+void StartUart()
+{
+    is_open_wifi_uart = true;
+}
+
+void CloseUart()
+{
+    is_open_wifi_uart = false;
 }

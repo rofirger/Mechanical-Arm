@@ -31,7 +31,7 @@ void Blink(uint16_t _times)
 void Init()
 {
     // 指示灯
-    gpio_init(INDICATOR, GPO, GPIO_LOW, GPO_PUSH_PULL);
+    gpio_init(INDICATOR, GPO, 0, GPO_PUSH_PULL);
     // 初始化步进电机驱动GPIO输出引脚
     gpio_init(AP_STEP, GPO, GPIO_LOW, GPO_PUSH_PULL);
     gpio_init(AN_STEP, GPO, GPIO_LOW, GPO_PUSH_PULL);

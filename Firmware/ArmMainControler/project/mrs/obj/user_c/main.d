@@ -81,7 +81,9 @@ user_c/main.o: \
  D:\projects\mechanical_arm\Firmware\ArmMainControler\project\user\inc/ETH.h \
  D:\projects\mechanical_arm\Firmware\ArmMainControler\project\user\inc/w25q128.h \
  D:\projects\mechanical_arm\Firmware\ArmMainControler\project\user\inc/ch32v30x_conf.h \
- D:\projects\mechanical_arm\Firmware\ArmMainControler\project\user\inc/isr.h
+ D:\projects\mechanical_arm\Firmware\ArmMainControler\project\user\inc/isr.h \
+ D:\projects\mechanical_arm\Firmware\ArmMainControler\project\user\inc/arm_kinematic.h \
+ D:\projects\mechanical_arm\Firmware\ArmMainControler\project\user\inc/headfile.h
 
 D:\projects\mechanical_arm\Firmware\ArmMainControler\libraries\zf_common/zf_common_headfile.h:
 
@@ -246,3 +248,7 @@ D:\projects\mechanical_arm\Firmware\ArmMainControler\project\user\inc/w25q128.h:
 D:\projects\mechanical_arm\Firmware\ArmMainControler\project\user\inc/ch32v30x_conf.h:
 
 D:\projects\mechanical_arm\Firmware\ArmMainControler\project\user\inc/isr.h:
+
+D:\projects\mechanical_arm\Firmware\ArmMainControler\project\user\inc/arm_kinematic.h:
+
+D:\projects\mechanical_arm\Firmware\ArmMainControler\project\user\inc/headfile.h:

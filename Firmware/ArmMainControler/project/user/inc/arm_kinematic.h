@@ -40,7 +40,7 @@
 typedef struct IK_AngleSolve
 {
     uint8_t _num_joint3_solve;
-    float _joint3[4];
+    float _joint3[8];
     float _joint1[8];
     float _joint2[8];
     float _joint4[8];
@@ -56,4 +56,5 @@ void EulerPosToTranformMat(const float* _euler_pos, float* _trans_mat);
 void RobotFK(const float* _joint_rotation, float* _output_joint_six_param);
 bool RobotIK(const float* _joint_rotation, IK_AngleSolve* _output_solve, const float* _last_joint);
 bool EulerPosToJointAngle(const float* _euler_pos, float* _joint_angles);
+bool CheckSolveAvailable(float* _joint_rad, const uint8_t _joint_index, const float _joint3_or_joint4_need_rad);
 #endif /* ARM_KINEMATIC_H_ */

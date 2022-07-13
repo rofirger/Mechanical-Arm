@@ -9,6 +9,7 @@
 #include "string.h"
 #include "ETH.h"
 #include "w25q128.h"
+#include "arm_kinematic.h"
 
 static uint16_t p_ms = 0;
 void Delay_Ms(uint32_t n)
@@ -73,6 +74,52 @@ void KeyInit()
     NVIC_InitStructure.NVIC_IRQChannelSubPriority = 2;
     NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
 
+    // 配置5key中断
+    // 菜单选中向上:up 向下:down 返回：left
+
+    // KEYUP中断初始化
+    GPIO_EXTILineConfig(KEYUP_PORT_SOURCE, KEYUP_PIN_SOURCE);
+    EXTI_InitStructure.EXTI_Line = KEYUP_LINE;
+    EXTI_InitStructure.EXTI_Mode = EXTI_Mode_Interrupt;
+    EXTI_InitStructure.EXTI_Trigger = EXTI_Trigger_Rising;
+    EXTI_InitStructure.EXTI_LineCmd = ENABLE;
+    EXTI_Init(&EXTI_InitStructure);
+
+    NVIC_PriorityGroupConfig(NVIC_PriorityGroup_4);
+    NVIC_InitStructure.NVIC_IRQChannel = KEYUP_IRQ;
+    NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 1;
+    NVIC_InitStructure.NVIC_IRQChannelSubPriority = 2;
+    NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
+    NVIC_Init(&NVIC_InitStructure);
+
+    // KEYDOWN初始化
+    GPIO_EXTILineConfig(KEYDOWN_PORT_SOURCE, KEYDOWN_PIN_SOURCE);
+    EXTI_InitStructure.EXTI_Line = KEYDOWN_LINE;
+    EXTI_InitStructure.EXTI_Mode = EXTI_Mode_Interrupt;
+    EXTI_InitStructure.EXTI_Trigger = EXTI_Trigger_Rising;
+    EXTI_InitStructure.EXTI_LineCmd = ENABLE;
+    EXTI_Init(&EXTI_InitStructure);
+
+    NVIC_PriorityGroupConfig(NVIC_PriorityGroup_4);
+    NVIC_InitStructure.NVIC_IRQChannel = KEYDOWN_IRQ;
+    NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 1;
+    NVIC_InitStructure.NVIC_IRQChannelSubPriority = 2;
+    NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
+    NVIC_Init(&NVIC_InitStructure);
+
+    // KEYLEFT中断初始化
+    GPIO_EXTILineConfig(KEYLEFT_PORT_SOURCE, KEYLEFT_PIN_SOURCE);
+    EXTI_InitStructure.EXTI_Line = KEYLEFT_LINE;
+    EXTI_InitStructure.EXTI_Mode = EXTI_Mode_Interrupt;
+    EXTI_InitStructure.EXTI_Trigger = EXTI_Trigger_Rising;
+    EXTI_InitStructure.EXTI_LineCmd = ENABLE;
+    EXTI_Init(&EXTI_InitStructure);
+
+    NVIC_PriorityGroupConfig(NVIC_PriorityGroup_4);
+    NVIC_InitStructure.NVIC_IRQChannel = KEYLEFT_IRQ;
+    NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 1;
+    NVIC_InitStructure.NVIC_IRQChannelSubPriority = 2;
+    NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
     NVIC_Init(&NVIC_InitStructure);
 }
 
@@ -213,7 +260,8 @@ void Init()
     gpio_init(EYELLOW_LED, GPO, GPIO_LOW, GPO_PUSH_PULL);
     KeyInit();
     CAN_Mode_Init( CAN_SJW_1tq, CAN_BS2_5tq, CAN_BS1_6tq, 12, CAN_Mode_Normal );
-
+    // 串口初始化
+    uart_init(UART_6, 115200, UART6_TX_C0, UART6_RX_C1);
     W25QXX_Init();
 }
 
@@ -257,6 +305,13 @@ void Config_Flash_SRAM(FLASH_SRAM_DEFIN SetFlashSRAM)
     FLASH_Lock();
 }
 
+volatile bool is_open_wifi_uart = false;
+void SendMsgToUart()
+{
+    static char msg[] = "hello";
+    uart_write_buffer(UART_6, msg, 6);
+}
+
 int main(void)
 {
 
@@ -280,8 +335,12 @@ int main(void)
         {
            WCHNET_HandleGlobalInt();
         }
-        FiveKeyStatus();
+        //FiveKeyStatus();
         Blink(1000);
+        if (is_open_wifi_uart)
+        {
+            SendMsgToUart();
+        }
     }
 }
 

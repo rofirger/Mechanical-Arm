@@ -206,7 +206,7 @@ void EXTI3_IRQHandler(void)
     if(SET == EXTI_GetITStatus(EXTI_Line3))
     {
         EXTI_ClearITPendingBit(EXTI_Line3);
-        CAN_Send_Msg("STOP#", 5, JOINT_GENERAL_ID);
+        CAN_Send_Msg("STOP#", 5, JOINT_GENERAL_ID >> 5);
     }
 }
 

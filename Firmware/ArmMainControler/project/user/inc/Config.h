@@ -86,5 +86,26 @@
 #define BUTTON2_LINE         EXTI_Line3
 #define BUTTON2_IRQ          EXTI3_IRQn
 
+// 5key÷–∂œ
+#define KEYUP_GPIO_PIN     GPIO_Pin_1
+#define KEYUP_GPIO_PORT    GPIOE
+#define KEYUP_PORT_SOURCE  GPIO_PortSourceGPIOE
+#define KEYUP_PIN_SOURCE   GPIO_PinSource1
+#define KEYUP_LINE         EXTI_Line1
+#define KEYUP_IRQ          EXTI1_IRQn
+
+#define KEYDOWN_GPIO_PIN     GPIO_Pin_2
+#define KEYDOWN_GPIO_PORT    GPIOE
+#define KEYDOWN_PORT_SOURCE  GPIO_PortSourceGPIOE
+#define KEYDOWN_PIN_SOURCE   GPIO_PinSource2
+#define KEYDOWN_LINE         EXTI_Line2
+#define KEYDOWN_IRQ          EXTI2_IRQn
+
+#define KEYLEFT_GPIO_PIN     GPIO_Pin_6
+#define KEYLEFT_GPIO_PORT    GPIOD
+#define KEYLEFT_PORT_SOURCE  GPIO_PortSourceGPIOD
+#define KEYLEFT_PIN_SOURCE   GPIO_PinSource6
+#define KEYLEFT_LINE         EXTI_Line6
+#define KEYLEFT_IRQ          EXTI9_5_IRQn
 
 #endif /* CONFIG_H_ */

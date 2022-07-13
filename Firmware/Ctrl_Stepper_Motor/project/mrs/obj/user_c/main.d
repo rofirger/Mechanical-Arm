@@ -80,7 +80,8 @@ user_c/main.o: \
  D:\projects\mechanical_arm\Firmware\Ctrl_Stepper_Motor\project\user\inc/headfile.h \
  D:\projects\mechanical_arm\Firmware\Ctrl_Stepper_Motor\project\user\inc/headfile.h \
  D:\projects\mechanical_arm\Firmware\Ctrl_Stepper_Motor\project\user\inc/MyCan.h \
- D:\projects\mechanical_arm\Firmware\Ctrl_Stepper_Motor\project\user\inc/msg_process.h
+ D:\projects\mechanical_arm\Firmware\Ctrl_Stepper_Motor\project\user\inc/msg_process.h \
+ D:\projects\mechanical_arm\Firmware\Ctrl_Stepper_Motor\project\user\inc/Motor.h
 
 D:\projects\mechanical_arm\Firmware\Ctrl_Stepper_Motor\project\user\inc/Motor.h:
 
@@ -243,3 +244,5 @@ D:\projects\mechanical_arm\Firmware\Ctrl_Stepper_Motor\project\user\inc/headfile
 D:\projects\mechanical_arm\Firmware\Ctrl_Stepper_Motor\project\user\inc/MyCan.h:
 
 D:\projects\mechanical_arm\Firmware\Ctrl_Stepper_Motor\project\user\inc/msg_process.h:
+
+D:\projects\mechanical_arm\Firmware\Ctrl_Stepper_Motor\project\user\inc/Motor.h:
