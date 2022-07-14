@@ -1,5 +1,6 @@
-user_c/main.o: \
- D:/projects/mechanical_arm/Firmware/ArmMainControler/project/user/src/main.c \
+user_c/menu.o: \
+ D:/projects/mechanical_arm/Firmware/ArmMainControler/project/user/src/menu.c \
+ D:\projects\mechanical_arm\Firmware\ArmMainControler\project\user\inc/menu.h \
  D:\projects\mechanical_arm\Firmware\ArmMainControler\libraries\zf_common/zf_common_headfile.h \
  D:\projects\mechanical_arm\Firmware\ArmMainControler\libraries\sdk\Peripheral/ch32v30x_adc.h \
  D:\projects\mechanical_arm\Firmware\ArmMainControler\libraries\sdk\Peripheral/ch32v30x.h \
@@ -74,23 +75,17 @@ user_c/main.o: \
  D:\projects\mechanical_arm\Firmware\ArmMainControler\libraries\zf_device/zf_device_bluetooth_ch9141.h \
  D:\projects\mechanical_arm\Firmware\ArmMainControler\libraries\zf_device/zf_device_wireless_ch573.h \
  D:\projects\mechanical_arm\Firmware\ArmMainControler\libraries\zf_device/zf_device_virtual_oscilloscope.h \
+ D:\projects\mechanical_arm\Firmware\ArmMainControler\project\user\inc/msg_process.h \
+ D:\projects\mechanical_arm\Firmware\ArmMainControler\project\user\inc/headfile.h \
  D:\projects\mechanical_arm\Firmware\ArmMainControler\project\user\inc/MyCan.h \
  D:\projects\mechanical_arm\Firmware\ArmMainControler\project\user\inc/Config.h \
  D:\projects\mechanical_arm\Firmware\ArmMainControler\NetLib/WCHNET.h \
  D:\projects\mechanical_arm\Firmware\ArmMainControler\libraries\sdk\Peripheral/ch32v30x_eth.h \
  D:\projects\mechanical_arm\Firmware\ArmMainControler\project\user\inc/ETH.h \
- D:\projects\mechanical_arm\Firmware\ArmMainControler\project\user\inc/w25q128.h \
- D:\projects\mechanical_arm\Firmware\ArmMainControler\project\user\inc/ch32v30x_conf.h \
- D:\projects\mechanical_arm\Firmware\ArmMainControler\project\user\inc/isr.h \
- D:\projects\mechanical_arm\Firmware\ArmMainControler\project\user\inc/arm_kinematic.h \
- D:\projects\mechanical_arm\Firmware\ArmMainControler\project\user\inc/headfile.h \
- D:\projects\mechanical_arm\Firmware\ArmMainControler\project\user\inc/menu.h \
- D:\projects\mechanical_arm\Firmware\ArmMainControler\project\user\inc/msg_process.h \
- D:\projects\mechanical_arm\Firmware\ArmMainControler\project\user\inc/MyCan.h \
- D:\projects\mechanical_arm\Firmware\ArmMainControler\project\user\inc/Config.h \
- D:\projects\mechanical_arm\Firmware\ArmMainControler\project\user\inc/ETH.h \
  D:\projects\mechanical_arm\Firmware\ArmMainControler\project\user\inc/joint.h \
  D:\projects\mechanical_arm\Firmware\ArmMainControler\project\user\inc/arm_kinematic.h
+
+D:\projects\mechanical_arm\Firmware\ArmMainControler\project\user\inc/menu.h:
 
 D:\projects\mechanical_arm\Firmware\ArmMainControler\libraries\zf_common/zf_common_headfile.h:
 
@@ -240,6 +235,10 @@ D:\projects\mechanical_arm\Firmware\ArmMainControler\libraries\zf_device/zf_devi
 
 D:\projects\mechanical_arm\Firmware\ArmMainControler\libraries\zf_device/zf_device_virtual_oscilloscope.h:
 
+D:\projects\mechanical_arm\Firmware\ArmMainControler\project\user\inc/msg_process.h:
+
+D:\projects\mechanical_arm\Firmware\ArmMainControler\project\user\inc/headfile.h:
+
 D:\projects\mechanical_arm\Firmware\ArmMainControler\project\user\inc/MyCan.h:
 
 D:\projects\mechanical_arm\Firmware\ArmMainControler\project\user\inc/Config.h:
@@ -247,26 +246,6 @@ D:\projects\mechanical_arm\Firmware\ArmMainControler\project\user\inc/Config.h:
 D:\projects\mechanical_arm\Firmware\ArmMainControler\NetLib/WCHNET.h:
 
 D:\projects\mechanical_arm\Firmware\ArmMainControler\libraries\sdk\Peripheral/ch32v30x_eth.h:
-
-D:\projects\mechanical_arm\Firmware\ArmMainControler\project\user\inc/ETH.h:
-
-D:\projects\mechanical_arm\Firmware\ArmMainControler\project\user\inc/w25q128.h:
-
-D:\projects\mechanical_arm\Firmware\ArmMainControler\project\user\inc/ch32v30x_conf.h:
-
-D:\projects\mechanical_arm\Firmware\ArmMainControler\project\user\inc/isr.h:
-
-D:\projects\mechanical_arm\Firmware\ArmMainControler\project\user\inc/arm_kinematic.h:
-
-D:\projects\mechanical_arm\Firmware\ArmMainControler\project\user\inc/headfile.h:
-
-D:\projects\mechanical_arm\Firmware\ArmMainControler\project\user\inc/menu.h:
-
-D:\projects\mechanical_arm\Firmware\ArmMainControler\project\user\inc/msg_process.h:
-
-D:\projects\mechanical_arm\Firmware\ArmMainControler\project\user\inc/MyCan.h:
-
-D:\projects\mechanical_arm\Firmware\ArmMainControler\project\user\inc/Config.h:
 
 D:\projects\mechanical_arm\Firmware\ArmMainControler\project\user\inc/ETH.h:
 

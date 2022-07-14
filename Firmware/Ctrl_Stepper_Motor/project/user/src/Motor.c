@@ -19,6 +19,7 @@ extern bool back_init_pos;
 volatile bool rot_done = true;
 JointRotationPos joint_rotation_pos;
 RotionStatus rotion_status;
+JointStatus joint_status = TO_BE_INITED;
 
 // À≥ ±’Î
 void CV_MotorStep(uint16_t _times, uint16_t _ms_interval)
@@ -51,7 +52,7 @@ void CV_MotorStep(uint16_t _times, uint16_t _ms_interval)
         if (joint_rotation_pos._now_offset_balance < -85 * SPEED_RATIO)
             _ms_interval = 180;
         else {
-            _ms_interval = 40;
+            _ms_interval = 48;
         }
 #endif
 #else
@@ -100,7 +101,7 @@ void CCV_MotorStep(uint16_t _times, uint16_t _ms_interval)
         if (joint_rotation_pos._now_offset_balance < -85 * SPEED_RATIO)
             _ms_interval = 180;
         else {
-            _ms_interval = 40;
+            _ms_interval = 48;
         }
 #endif
 #else
@@ -161,7 +162,7 @@ void KeepPos()
 {
     static MT6816_Structure _data;
     static PosErr _pid_err = { {0, 0, 0}, 0 };
-    static PID _pid = { 0.53, 0, 0.00002 };
+    static PID _pid = { 0.53, 0, 0.0002 };
     MT6816_ReadAngle(&_data);
     float _new_pos = _data._decode_angle;
     joint_rotation_pos._now_offset_balance += (_new_pos - joint_rotation_pos._now_pos);
@@ -172,6 +173,13 @@ void KeepPos()
     {
         float _ccw_incr = PID_Pos(&_pid_err, &_pid, joint_rotation_pos._now_offset_balance, joint_rotation_pos._target_offset_balance);
         _pid_err.loc_sum = 0;
+        if (joint_status == ROTING_TO_NEW_POS)
+        {
+            if (fabsf(_ccw_incr) < 5)
+            {
+                joint_status = STAY_IN_POS;
+            }
+        }
         if (_ccw_incr > 0)
         {
             // À≥ ±’Î–˝◊™
@@ -184,10 +192,10 @@ void KeepPos()
                 CV_MotorStep(_ccw_incr, 48);
 #elif (AXIS5 == 1 || AXIS4 == 1)
             SendBackChangeEncoder(INCREASE_ENCODER, _ccw_incr);
-            CV_MotorStep(_ccw_incr, 10);
+            CV_MotorStep(_ccw_incr, 20);
 #elif (AXIS1 == 1 || AXIS3 == 1)
             SendBackChangeEncoder(INCREASE_ENCODER, _ccw_incr);
-            CV_MotorStep(_ccw_incr, 25);
+            CV_MotorStep(_ccw_incr, 30);
 #endif
 #else
             SendBackChangeEncoder(INCREASE_ENCODER, _ccw_incr);
@@ -207,10 +215,10 @@ void KeepPos()
             }
 #elif (AXIS5 == 1 || AXIS4 == 1)
             SendBackChangeEncoder(DECREASE_ENCODER, -_ccw_incr);
-            CCV_MotorStep(-_ccw_incr, 10);
+            CCV_MotorStep(-_ccw_incr, 20);
 #elif (AXIS1 == 1 || AXIS3 == 1)
             SendBackChangeEncoder(DECREASE_ENCODER, -_ccw_incr);
-            CCV_MotorStep(-_ccw_incr, 25);
+            CCV_MotorStep(-_ccw_incr, 30);
 #endif
 #else
             SendBackChangeEncoder(DECREASE_ENCODER, -_ccw_incr);
@@ -235,9 +243,9 @@ void InitPos()
 #endif
 
 #if (AXIS2 == 1)
-    if (joint_rotation_pos._now_pos > 200)
+    if (joint_rotation_pos._now_pos > 150)
         joint_rotation_pos._now_offset_balance = -(BALANCE_POS_ANGLE + 360 - joint_rotation_pos._now_pos);
-    else if (joint_rotation_pos._now_pos > 200 < 100){
+    else if (joint_rotation_pos._now_pos < 100){
         joint_rotation_pos._now_offset_balance = -(BALANCE_POS_ANGLE - joint_rotation_pos._now_pos);
     }
     joint_rotation_pos._init_pos_offset_balance = -(BALANCE_POS_ANGLE + 360 - INIT_POS_ANGLE);
@@ -272,6 +280,7 @@ void InitPos()
 #endif
     joint_rotation_pos._target_offset_balance = joint_rotation_pos._init_pos_offset_balance;
     is_start = true;
+    joint_status = INITED;
 }
 
 /*
@@ -304,6 +313,7 @@ void SetPos(const float _motor_angle)
 #endif
 
     ErrorCompensation(joint_rotation_pos._now_offset_balance, &joint_rotation_pos._target_offset_balance);
+    joint_status = ROTING_TO_NEW_POS;
 }
 
 /*
@@ -361,11 +371,11 @@ void ErrorCompensation(const int _now_offset_balance, int* _target_offset_balanc
 #if (AXIS2 == 1)
     if (*_target_offset_balance / SPEED_RATIO > -90 && _now_offset_balance / SPEED_RATIO < -90)
     {
-        *_target_offset_balance -= INVALID_ROTION_ENCODER * 1.5;
+        *_target_offset_balance -= INVALID_ROTION_ENCODER * 1.8;
     }
     if (*_target_offset_balance / SPEED_RATIO < -90 && _now_offset_balance / SPEED_RATIO > -90)
     {
-        *_target_offset_balance += INVALID_ROTION_ENCODER * 1.5;
+        *_target_offset_balance += INVALID_ROTION_ENCODER * 1.8;
     }
 #endif
 #if (AXIS5 == 1)

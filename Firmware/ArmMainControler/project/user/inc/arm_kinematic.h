@@ -57,4 +57,5 @@ void RobotFK(const float* _joint_rotation, float* _output_joint_six_param);
 bool RobotIK(const float* _joint_rotation, IK_AngleSolve* _output_solve, const float* _last_joint);
 bool EulerPosToJointAngle(const float* _euler_pos, float* _joint_angles);
 bool CheckSolveAvailable(float* _joint_rad, const uint8_t _joint_index, const float _joint3_or_joint4_need_rad);
+void MoveToNewPos(const float* _euler_pos);
 #endif /* ARM_KINEMATIC_H_ */

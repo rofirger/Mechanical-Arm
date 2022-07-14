@@ -9,6 +9,8 @@
 #define JOINT_H_
 
 #include "arm_kinematic.h"
+#include "joint.h"
+
 
 // 减速器速比
 #define SPEED_RATIO         26.8510
@@ -57,6 +59,15 @@ typedef struct JointRotationPos
     int _init_pos_offset_balance;       // 初始位置相对平衡位置的偏差
 }JointRotationPos;
 
+typedef enum JointStatus
+{
+    TO_BE_INITED,
+    INITED,
+    ROTING_TO_NEW_POS,
+    STAY_IN_POS
+}JointStatus;
+
+extern JointStatus joint_status[6];
 
 void InitRobot(void);
 void BackRobot(void);

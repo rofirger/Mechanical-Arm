@@ -3,6 +3,7 @@
 #include "dvp.h"
 #include "ov.h"
 #include "sram.h"
+#include "MyCan.h"
 #include "img_process.h"
 
 const uint16_t img_height = ROW_TFT_HEIGHT;
@@ -15,6 +16,8 @@ uint8_t red_binary_dvp_img[ROW_TFT_HEIGHT][ROW_TFT_WIDTH / 2];
 extern RedLinePos red_line_pos[10];
 // Ö±·½Í¼
 short hist_gram[256];
+
+extern bool is_scan;
 
 void Blink(uint16_t _times)
 {
@@ -199,18 +202,34 @@ int main(void)
     }
     RGB565_Mode_Init();
     DVP_OV_Init();
-    tft180_show_string(0, 0, "hello world!");
+    tft180_show_string(0, 0, "hello!");
 
     uint8_t px;
     uint8_t pxbuf[30];
+    int _ret_no_zero = 0;
+    int _max_ret = 0;
+    int _last_ret = -1;
     while(1)
     {
 
-        if (dvp_img_finish_flag)
+        if (dvp_img_finish_flag && is_scan)
         {
 
             SeekRed(red_line_pos, img_dvp[0], img_width, img_height, (uint8_t*)red_binary_dvp_img);
             int16_t ret = SeekRedLine((uint8_t*)red_binary_dvp_img, img_width, img_height);
+            if (ret != 0)
+            {
+                _ret_no_zero++;
+                if (_max_ret < ret)
+                {
+                    _max_ret = ret;
+                }
+                if (_ret_no_zero > 200)
+                {
+                    _last_ret = _max_ret;
+                }
+                //Solve(_last_ret);
+            }
             tft180_show_int(0, 0, ret, 3);
             //tft180_show_rgb565_image(0, 0, img_dvp[0], img_width, img_height, img_width, img_height, 1);
             //ToGray();
@@ -222,12 +241,20 @@ int main(void)
             //Zbar_Test(binary_dvp_img[0], img_width, img_height);
             //tft180_show_string(0, 0, "hello world!");
             dvp_img_finish_flag = 0;
+
         }
+        //Blink(5000);
         system_delay_ms(2);
     }
 }
 
-
+void Solve(int _last_value)
+{
+    char send_msg[] = "PIC *#";
+    send_msg[4] = _last_value;
+    CAN_Send_Msg(send_msg, 6, MAIN_CONTROLER_FILTER_ID_A);
+    is_scan = false;
+}
 
 
 

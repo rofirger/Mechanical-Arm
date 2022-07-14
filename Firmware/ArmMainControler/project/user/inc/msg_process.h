@@ -22,4 +22,5 @@ void BackRobot(void);
 void WakeRobot(void);
 void StartUart();
 void CloseUart();
+void QueryJointStatus(void);
 #endif /* MSG_PROCESS_H_ */

@@ -21,6 +21,7 @@
 #include "WCHNET.h"
 #include "msg_process.h"
 #include "MyCan.h"
+#include "menu.h"
 
 void NMI_Handler(void)       __attribute__((interrupt("WCH-Interrupt-fast")));
 void HardFault_Handler(void) __attribute__((interrupt("WCH-Interrupt-fast")));
@@ -188,7 +189,7 @@ void EXTI1_IRQHandler(void)
     if(SET == EXTI_GetITStatus(EXTI_Line1))
     {
         EXTI_ClearITPendingBit(EXTI_Line1);
-
+        KeyUp();
     }
 }
 
@@ -197,7 +198,7 @@ void EXTI2_IRQHandler(void)
     if(SET == EXTI_GetITStatus(EXTI_Line2))
     {
         EXTI_ClearITPendingBit(EXTI_Line2);
-
+        KeyDown();
     }
 }
 
@@ -228,7 +229,7 @@ void EXTI9_5_IRQHandler(void)
     if(SET == EXTI_GetITStatus(EXTI_Line6))
     {
         EXTI_ClearITPendingBit(EXTI_Line6);
-
+        KeyLeft();
     }
     if(SET == EXTI_GetITStatus(EXTI_Line7))
     {
@@ -341,7 +342,7 @@ void TIM6_IRQHandler(void)
     if(TIM_GetITStatus(TIM6, TIM_IT_Update) != RESET)
     {
        TIM_ClearITPendingBit(TIM6, TIM_IT_Update );
-
+       QueryJointStatus();
 
     }
 }

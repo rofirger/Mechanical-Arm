@@ -8,14 +8,14 @@
 #include "joint.h"
 #include "arm_kinematic.h"
 
-
 // 以下四个数组的值均为角度, 而非弧度
 // 当前机械臂末端的欧拉位置, 前三个代表相对零点坐标，后三个代表相对原点X-Y-Z固定角旋转角(弧度)
-float EulerPosNow[6];
+float EulerPosNow[6] = {0};
 // 新目标机械臂末端的欧拉位置, 前三个代表相对零点坐标，后三个代表相对原点X-Y-Z固定角旋转角(弧度)
-float EulerPosNew[6];
+float EulerPosNew[6] = {0};
 // 当前机械臂关节的旋转角(角度)
-float JointRotationNow[6];
+float JointRotationNow[6] = {0};
 // 目标机械臂关节旋转角(角度)
-float JointRotationNew[6];
+float JointRotationNew[6] = {0};
 
+JointStatus joint_status[6] = {0};

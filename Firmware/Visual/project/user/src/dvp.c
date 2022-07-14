@@ -70,5 +70,5 @@ void DVP_OV_Init()
 void dvp_handler()
 {
     dvp_img_finish_flag = 1;
-    Blink(100);
+
 }

@@ -15,6 +15,7 @@
 uint8_t* CAN_MSG[8];
 extern bool is_stop;
 extern JointRotationPos joint_rotation_pos;
+extern JointStatus joint_status;;
 bool back_init_pos =false;
 bool back_msg[6] = {false};
 
@@ -45,7 +46,10 @@ void CAN_MsgProcess(char* _can_msg)
             is_stop = false;
             back_init_pos = false;
         }
-
+        else if (strcmp(_main_msg, "STATUS") == 0)
+        {
+            SendBackStatus();
+        }
         char* _head_cmd = strtok(_main_msg, " ");
         if (_head_cmd)
         {
@@ -132,28 +136,28 @@ void CAN_MsgProcess(char* _can_msg)
  */
 void SendBackChangeEncoder(const RotionDir _dir, int _num)
 {
-    char _send_back_msg[8] = {'\0'};
-    if (_dir == INCREASE_ENCODER)
-    {
-        _send_back_msg[0] = 'A';
-        _send_back_msg[1] = JOINT_INDEX + '0';
-        _send_back_msg[2] = ' ';
-        char _num_str[8] = {'\0'};
-        itoa(_num, _num_str, 10);
-        memcpy(&_send_back_msg[3], _num_str, strlen(_num_str) * sizeof(char));
-        _send_back_msg[3 + strlen(_num_str)] = '#';
-        CAN_Send_Msg(_send_back_msg, 4 + strlen(_num_str), MAIN_CONTROLER_FILTER_ID_A >> 5);
-    }
-    else {
-        _send_back_msg[0] = 'S';
-        _send_back_msg[1] = JOINT_INDEX + '0';
-        _send_back_msg[2] = ' ';
-        char _num_str[8] = {'\0'};
-        itoa(_num, _num_str, 10);
-        memcpy(&_send_back_msg[3], _num_str, strlen(_num_str) * sizeof(char));
-        _send_back_msg[3 + strlen(_num_str)] = '#';
-        CAN_Send_Msg(_send_back_msg, 4 + strlen(_num_str), MAIN_CONTROLER_FILTER_ID_A >> 5);
-    }
+//    char _send_back_msg[8] = {'\0'};
+//    if (_dir == INCREASE_ENCODER)
+//    {
+//        _send_back_msg[0] = 'A';
+//        _send_back_msg[1] = JOINT_INDEX + '0';
+//        _send_back_msg[2] = ' ';
+//        char _num_str[8] = {'\0'};
+//        itoa(_num, _num_str, 10);
+//        memcpy(&_send_back_msg[3], _num_str, strlen(_num_str) * sizeof(char));
+//        _send_back_msg[3 + strlen(_num_str)] = '#';
+//        CAN_Send_Msg(_send_back_msg, 4 + strlen(_num_str), MAIN_CONTROLER_FILTER_ID_A >> 5);
+//    }
+//    else {
+//        _send_back_msg[0] = 'S';
+//        _send_back_msg[1] = JOINT_INDEX + '0';
+//        _send_back_msg[2] = ' ';
+//        char _num_str[8] = {'\0'};
+//        itoa(_num, _num_str, 10);
+//        memcpy(&_send_back_msg[3], _num_str, strlen(_num_str) * sizeof(char));
+//        _send_back_msg[3 + strlen(_num_str)] = '#';
+//        CAN_Send_Msg(_send_back_msg, 4 + strlen(_num_str), MAIN_CONTROLER_FILTER_ID_A >> 5);
+//    }
 }
 
 /*
@@ -183,4 +187,43 @@ void KeepPosSendBroadcastMsg()
  */
 void RotingSendBroadcastMsg()
 {
+}
+
+/*
+ *@brief:·µ»Ø¹Ø½Ú×´Ì¬
+ */
+void SendBackStatus(void)
+{
+    char _status_str1[] = "T* UNI#";
+    char _status_str2[] = "T* INI#";
+    char _status_str3[] = "T* STA#";
+    char _status_str4[] = "T* ROT#";
+    _status_str1[1] = JOINT_INDEX + '0';
+    _status_str2[1] = JOINT_INDEX + '0';
+    _status_str3[1] = JOINT_INDEX + '0';
+    _status_str4[1] = JOINT_INDEX + '0';
+    switch (joint_status)
+    {
+    case TO_BE_INITED:
+    {
+        CAN_Send_Msg(_status_str1, strlen(_status_str1), MAIN_CONTROLER_FILTER_ID_A);
+        break;
+    }
+    case INITED:
+    {
+        CAN_Send_Msg(_status_str2, strlen(_status_str2), MAIN_CONTROLER_FILTER_ID_A);
+        break;
+    }
+    case ROTING_TO_NEW_POS:
+    {
+        CAN_Send_Msg(_status_str4, strlen(_status_str4), MAIN_CONTROLER_FILTER_ID_A);
+        break;
+    }
+    case STAY_IN_POS:
+    {
+        CAN_Send_Msg(_status_str3, strlen(_status_str3), MAIN_CONTROLER_FILTER_ID_A);
+        break;
+    }
+    }
+
 }

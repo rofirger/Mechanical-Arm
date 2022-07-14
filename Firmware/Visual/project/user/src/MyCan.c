@@ -135,6 +135,16 @@ void CAN_Mode_Init(uint8_t tsjw, uint8_t tbs2, uint8_t tbs1, uint16_t brp, uint8
     CAN_FilterInitSturcture.CAN_FilterFIFOAssignment = CAN_Filter_FIFO0;
     CAN_FilterInitSturcture.CAN_FilterActivation = ENABLE;
     CAN_FilterInit( &CAN_FilterInitSturcture );
+
+    CAN_ClearITPendingBit( CAN1, CAN_IT_FMP0 );
+    NVIC_InitTypeDef NVIC_InitStructure;
+    NVIC_InitStructure.NVIC_IRQChannel = USB_LP_CAN1_RX0_IRQn;
+    NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 1;
+    NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;
+    NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
+    NVIC_Init(&NVIC_InitStructure);
+
+    CAN_ITConfig( CAN1, CAN_IT_FMP0, ENABLE );
 }
 
 /*********************************************************************
@@ -148,7 +158,7 @@ void CAN_Mode_Init(uint8_t tsjw, uint8_t tbs2, uint8_t tbs1, uint16_t brp, uint8
  * @return  0 - Send successful.
  *          1 - Send failed.
  */
-uint8_t CAN_Send_Msg(uint8_t *msg, uint8_t len)
+uint8_t CAN_Send_Msg(uint8_t *msg, uint8_t len, uint32_t _id)
 {
     uint8_t mbox;
     uint16_t i = 0;
@@ -156,7 +166,7 @@ uint8_t CAN_Send_Msg(uint8_t *msg, uint8_t len)
     CanTxMsg CanTxStructure;
 
 #if (Frame_Format == Standard_Frame)
-    CanTxStructure.StdId = MAIN_CONTROLER_FILTER_ID_A;
+    CanTxStructure.StdId = _id;
     CanTxStructure.IDE = CAN_Id_Standard;
 
 #elif (Frame_Format == Extended_Frame)

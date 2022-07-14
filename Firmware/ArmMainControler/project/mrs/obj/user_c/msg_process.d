@@ -83,7 +83,9 @@ user_c/msg_process.o: \
  D:\projects\mechanical_arm\Firmware\ArmMainControler\libraries\zf_device/zf_device_virtual_oscilloscope.h \
  D:\projects\mechanical_arm\Firmware\ArmMainControler\project\user\inc/arm_kinematic.h \
  D:\projects\mechanical_arm\Firmware\ArmMainControler\project\user\inc/joint.h \
- D:\projects\mechanical_arm\Firmware\ArmMainControler\project\user\inc/arm_kinematic.h
+ D:\projects\mechanical_arm\Firmware\ArmMainControler\project\user\inc/arm_kinematic.h \
+ D:\projects\mechanical_arm\Firmware\ArmMainControler\project\user\inc/joint.h \
+ D:\projects\mechanical_arm\Firmware\ArmMainControler\project\user\inc/MyCan.h
 
 D:\projects\mechanical_arm\Firmware\ArmMainControler\project\user\inc/msg_process.h:
 
@@ -252,3 +254,7 @@ D:\projects\mechanical_arm\Firmware\ArmMainControler\project\user\inc/arm_kinema
 D:\projects\mechanical_arm\Firmware\ArmMainControler\project\user\inc/joint.h:
 
 D:\projects\mechanical_arm\Firmware\ArmMainControler\project\user\inc/arm_kinematic.h:
+
+D:\projects\mechanical_arm\Firmware\ArmMainControler\project\user\inc/joint.h:
+
+D:\projects\mechanical_arm\Firmware\ArmMainControler\project\user\inc/MyCan.h:

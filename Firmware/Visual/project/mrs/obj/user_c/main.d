@@ -78,6 +78,7 @@ user_c/main.o: \
  D:\projects\mechanical_arm\Firmware\Visual\project\user\inc/ov.h \
  D:\projects\mechanical_arm\Firmware\Visual\project\user\inc/sram.h \
  D:\projects\mechanical_arm\Firmware\Visual\project\user\inc/headfile.h \
+ D:\projects\mechanical_arm\Firmware\Visual\project\user\inc/MyCan.h \
  D:\projects\mechanical_arm\Firmware\Visual\project\user\inc/img_process.h \
  D:\projects\mechanical_arm\Firmware\Visual\project\user\inc/ov.h
 
@@ -236,6 +237,8 @@ D:\projects\mechanical_arm\Firmware\Visual\project\user\inc/ov.h:
 D:\projects\mechanical_arm\Firmware\Visual\project\user\inc/sram.h:
 
 D:\projects\mechanical_arm\Firmware\Visual\project\user\inc/headfile.h:
+
+D:\projects\mechanical_arm\Firmware\Visual\project\user\inc/MyCan.h:
 
 D:\projects\mechanical_arm\Firmware\Visual\project\user\inc/img_process.h:
 

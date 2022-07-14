@@ -11,9 +11,9 @@
 #define AXIS1   0
 #define AXIS2   0
 #define AXIS3   0
-#define AXIS4   1
+#define AXIS4   0
 #define AXIS5   0
-#define AXIS6   0
+#define AXIS6   1
 #define AXIS7   0
 
 #if (AXIS1 == 1)

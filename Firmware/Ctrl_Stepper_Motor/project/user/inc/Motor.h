@@ -71,8 +71,8 @@
 #endif
 
 #if (AXIS2 == 1)
-#define INIT_POS_ANGLE          280
-#define BALANCE_POS_ANGLE       213
+#define INIT_POS_ANGLE          141
+#define BALANCE_POS_ANGLE       74
 #endif
 
 #if (AXIS3 == 1)
@@ -115,6 +115,14 @@ typedef struct RotionStatus
     RotionDir _last_rotion_dir;
     RotionDir _next_rotion_dir;
 }RotionStatus;
+
+typedef enum JointStatus
+{
+    TO_BE_INITED,
+    INITED,
+    ROTING_TO_NEW_POS,
+    STAY_IN_POS
+}JointStatus;
 
 void CV_MotorStep(uint16_t _times, uint16_t _ms_interval);
 void CCV_MotorStep(uint16_t _times, uint16_t _ms_interval);

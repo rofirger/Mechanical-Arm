@@ -10,6 +10,7 @@
 #include "ETH.h"
 #include "w25q128.h"
 #include "arm_kinematic.h"
+#include "menu.h"
 
 static uint16_t p_ms = 0;
 void Delay_Ms(uint32_t n)
@@ -121,6 +122,9 @@ void KeyInit()
     NVIC_InitStructure.NVIC_IRQChannelSubPriority = 2;
     NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
     NVIC_Init(&NVIC_InitStructure);
+
+    // 关节状态查询定时器
+    pit_init_ms(TIM6_PIT, 1500);
 }
 
 void FiveKeyStatus()
@@ -324,10 +328,10 @@ int main(void)
     Eth();
     //gpio_set_level(BEEP, 1);
     uint16_t flash_id = W25QXX_ReadID();
-    tft180_show_string(10, 10, "Hello world" );
+    //tft180_show_string(10, 10, "Hello world" );
 
     uint8_t pxbuf[10] = {'\0'};
-
+    InitMenu();
     while(1)
     {
         WCHNET_MainTask();                                                     /*以太网库主任务函数，需要循环调用*/

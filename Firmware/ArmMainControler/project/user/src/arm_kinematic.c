@@ -19,6 +19,7 @@
 #include "joint.h"
 #include "math.h"
 #include "WCHNET.h"
+#include "MyCan.h"
 
 // 连杆参数表
 float link_parameter[6][4] = {
@@ -775,7 +776,7 @@ void JointRadToAngle(const float* _in_joint_rad, float* _out_joint_angle)
 }
 
 /*
- * @param:  _euler_pos[const float*]:前三个代表相对零点坐标，后三个代表相对原点X-Y-Z固定角旋转角(弧度)           _joint_angles[float*]:输出机械臂六个轴旋转角度
+ * @param:  _euler_pos[const float*]:前三个代表相对零点坐标，后三个代表相对原点X-Y-Z欧拉角旋转角(弧度)           _joint_angles[float*]:输出机械臂六个轴旋转角度
  */
 bool EulerPosToJointAngle(const float* _euler_pos, float* _joint_angles)
 {
@@ -936,4 +937,27 @@ bool EulerPosToJointAngle(const float* _euler_pos, float* _joint_angles)
         return false;
     }
     return false;
+}
+
+void MoveToNewPos(const float* _euler_pos)
+{
+    for (uint8_t _i; _i < 6; ++_i)
+    {
+        EulerPosNew[_i] = _euler_pos[_i];
+    }
+    bool is_exit_solve = EulerPosToJointAngle(EulerPosNew, JointRotationNew);
+    if (is_exit_solve)
+    {
+        tft180_show_string(0, 60, "NEW");
+        char _send_joint_to_angle[8] = {'\0'};
+        for (uint8_t _i = 0; _i < 6; ++_i)
+        {
+            memset(_send_joint_to_angle, 0, 8);
+            memcpy(_send_joint_to_angle, "TO ", 3);
+            itoa(JointRotationNew[_i] * SPEED_RATIO, &_send_joint_to_angle[3], 10);
+            uint8_t _size = strlen(_send_joint_to_angle);
+            _send_joint_to_angle[_size++] = '#';
+            CAN_Send_Msg(_send_joint_to_angle, _size, ((JOINT_ID_BASE + JOINT_ID_OFFSET * _i) >> 5));
+        }
+    }
 }
