@@ -1,8 +1,8 @@
 /*
- * img_process.c
+ *      @File: img_process.c
  *
- *  Created on: 2022年7月1日
- *      Author: 随风
+ *      @Team: 删库跑路队
+ *      @Author: 随风
  */
 
 #include "img_process.h"
@@ -72,72 +72,72 @@ int16_t SeekRedLine(uint8_t* _red_binary_dvp_img, uint16_t _width, uint16_t _hei
     uint8_t _red_block_height = 0;
     bool _is_white_line = false;
     bool _is_square_red_block = true;
-//    uint8_t _i = 8;
-//    for (; _i < _height - 8; ++_i)
-//    {
-//        uint8_t _num_white = 0;
-//        for (uint8_t _j = 0; _j < _width - 1; ++_j)
-//        {
-//            if (_red_binary_dvp_img[_i * _width + _j] == 0 && _red_binary_dvp_img[_i * _width + _j + 1] == 0)
-//            {
-//                if (_width_start_point == -1)
-//                    _width_start_point = _j;
-//                if (_height_start_point == -1)
-//                    _height_start_point = _i;
-//            }
-//            else {
-//                _num_white++;
-//            }
-//            if (_width_start_point != -1)
-//            {
-//                if (_width_end_point == -1 && _red_binary_dvp_img[_i * _width + _j] == 255 && _red_binary_dvp_img[_i * _width + _j + 1] == 255)
-//                {
-//                    _width_end_point = _j;
-//                    break;
-//                }
-//            }
-//            if (_j == _width - 2 && _width_start_point != -1 && _width_end_point == -1)
-//            {
-//                _width_start_point = -1;
-//                _height_start_point = -1;
-//            }
-//        }
-//        if (_num_white > _width - 3)
-//            _is_white_line = true;
-//        else
-//            _is_white_line = false;
-//        if (_is_white_line && _height_end_point == -1
-//             && _width_start_point != -1
-//             && _height_start_point != -1
-//             && _width_end_point != -1)
-//        {
-//            _is_white_line = false;
-//            _height_end_point = _i;
-//            if (false == _is_square_red_block)
-//            {
-//                if (_i > 2 * _width / 3)
-//                    return -1;
-//                if (ABS(_width_end_point - _width_start_point - _height_end_point - _height_start_point) < (_width_end_point - _width_start_point) * 2)
-//                {
-//                    _is_square_red_block = true;
-//                    _red_block_height = _height_end_point - _height_start_point;
-//                    _num_white = 0;
-//                    _width_start_point = -1;
-//                    _width_end_point = -1;
-//                    _height_start_point = -1;
-//                    _height_end_point = -1;
-//                    break;
-//                }
-//                else {
-//                    return -1;
-//                }
-//            }
-//        }
-//    }
+    uint8_t _i = 8;
+    for (; _i < _height - 8; ++_i)
+    {
+        uint8_t _num_white = 0;
+        for (uint8_t _j = 0; _j < _width - 1; ++_j)
+        {
+            if (_red_binary_dvp_img[_i * _width + _j] == 0 && _red_binary_dvp_img[_i * _width + _j + 1] == 0)
+            {
+                if (_width_start_point == -1)
+                    _width_start_point = _j;
+                if (_height_start_point == -1)
+                    _height_start_point = _i;
+            }
+            else {
+                _num_white++;
+            }
+            if (_width_start_point != -1)
+            {
+                if (_width_end_point == -1 && _red_binary_dvp_img[_i * _width + _j] == 255 && _red_binary_dvp_img[_i * _width + _j + 1] == 255)
+                {
+                    _width_end_point = _j;
+                    break;
+                }
+            }
+            if (_j == _width - 2 && _width_start_point != -1 && _width_end_point == -1)
+            {
+                _width_start_point = -1;
+                _height_start_point = -1;
+            }
+        }
+        if (_num_white > _width - 3)
+            _is_white_line = true;
+        else
+            _is_white_line = false;
+        if (_is_white_line && _height_end_point == -1
+             && _width_start_point != -1
+             && _height_start_point != -1
+             && _width_end_point != -1)
+        {
+            _is_white_line = false;
+            _height_end_point = _i;
+            if (false == _is_square_red_block)
+            {
+                if (_i > 2 * _width / 3)
+                    return -1;
+                if (ABS(_width_end_point - _width_start_point - _height_end_point - _height_start_point) < (_width_end_point - _width_start_point) * 2)
+                {
+                    _is_square_red_block = true;
+                    _red_block_height = _height_end_point - _height_start_point;
+                    _num_white = 0;
+                    _width_start_point = -1;
+                    _width_end_point = -1;
+                    _height_start_point = -1;
+                    _height_end_point = -1;
+                    break;
+                }
+                else {
+                    return -1;
+                }
+            }
+        }
+    }
     // 偏移
     if (_is_square_red_block)
     {
-        uint8_t _start_row = _height / 2;
+        uint8_t _start_row = _i + _red_block_height * 2;
         if (_start_row > _height - 3)
             return -1;
         uint8_t _ret_num_red_block = 0;
@@ -162,7 +162,34 @@ int16_t SeekRedLine(uint8_t* _red_binary_dvp_img, uint16_t _width, uint16_t _hei
     return -1;
 }
 
-
+/*
+ *  @brief:寻找最靠近左上角的红色方块
+ *  @return:最靠近左上角的红色方块
+ */
+Pos FindRedPos(uint8_t* _red_binary_dvp_img, uint16_t _width, uint16_t _height)
+{
+    // 找最靠近左上角的红色块
+    Pos _ret = {._x = _width, ._y = _height};
+    // 2*2方块寻找
+    for (uint16_t _i = 0; _i < _height; _i += 2)
+    {
+        for (uint16_t _j = 0; _j < _width; _j += 2)
+        {
+            if (_red_binary_dvp_img[_i * _width + _j] == 0 &&
+                _red_binary_dvp_img[(_i) * _width + _j + 1] == 0 &&
+                _red_binary_dvp_img[(_i + 1) * _width + _j] == 0 &&
+                _red_binary_dvp_img[(_i + 1) * _width + _j + 1] == 0)
+            {
+                if (_ret._x > _j && _ret._y > _i)
+                {
+                    _ret._x = _j;
+                    _ret._y = _i;
+                }
+            }
+        }
+    }
+    return _ret;
+}
 
 
 

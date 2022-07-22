@@ -1,8 +1,8 @@
 /*
- * w25q128.c
+ *      @File: w25q128.h
  *
- *  Created on: 2022年6月6日
- *      Author: 随风
+ *      @Team: 删库跑路队
+ *      @Author: 随风
  */
 #include "w25q128.h"
 #include "Config.h"

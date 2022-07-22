@@ -22,6 +22,7 @@
 #include "msg_process.h"
 #include "MyCan.h"
 #include "menu.h"
+#include "joint.h"
 
 void NMI_Handler(void)       __attribute__((interrupt("WCH-Interrupt-fast")));
 void HardFault_Handler(void) __attribute__((interrupt("WCH-Interrupt-fast")));
@@ -357,13 +358,34 @@ void TIM7_IRQHandler(void)
     }
 }
 
-
+extern bool is_init;
+// 机械臂运动过程临时点
+extern RotingPos roting_pos;
+volatile bool is_read_to_release = false;
 void TIM8_UP_IRQHandler(void)
 {
     if(TIM_GetITStatus(TIM8, TIM_IT_Update) != RESET)
     {
         TIM_ClearITPendingBit(TIM8, TIM_IT_Update);
+        if (roting_pos._is_roting == true && GetRobotStatus() == STAY && is_init && roting_pos._is_move_to_new_pos[roting_pos._now_index] && roting_pos._now_index < roting_pos._max_index)
+        {
+            UpdateRobotStatus(ROTING);
+            pit_disable(TIM8_PIT);
+            roting_pos._is_move_to_new_pos[roting_pos._now_index] = false;
+            MoveToNewPos(roting_pos._move_to_new_pos[roting_pos._now_index]);
+            roting_pos._now_index++;
 
+            pit_enable(TIM8_PIT);
+        }
+        else if (roting_pos._now_index >= roting_pos._max_index)
+        {
+            roting_pos._now_index = 0;
+            if (GetRobotTask() == ROT_TO_SHELF)
+            {
+                is_read_to_release = true;
+                UpdateRobotTransform(PREPARE_TRANSFORMING);
+            }
+        }
     }
 }
 
@@ -387,18 +409,18 @@ void TIM10_UP_IRQHandler(void)
     }
 }
 
-extern uint8_t* CAN_MSG[8];
+extern uint8_t CAN_MSG[8];
 void USB_LP_CAN1_RX0_IRQHandler(void) __attribute__((interrupt("WCH-Interrupt-fast")));
 void USB_LP_CAN1_RX0_IRQHandler(void)
 {
     if (CAN_GetITStatus(CAN1, CAN_IT_FMP0) == SET)
     {
+        CAN_ClearITPendingBit(CAN1, CAN_IT_FMP0);
         uint8_t px = CAN_Receive_Msg(CAN_MSG);
         if (px)
         {
             CAN_MsgProcess(CAN_MSG);
         }
-        CAN_ClearITPendingBit(CAN1, CAN_IT_FMP0);
     }
 }
 

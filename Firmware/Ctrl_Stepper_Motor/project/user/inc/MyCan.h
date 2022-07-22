@@ -1,8 +1,8 @@
 /*
- * MyCan.h
+ *      @File: MyCan.h
  *
- *  Created on: 2022年5月3日
- *      Author: 随风
+ *      @Team: 删库跑路队
+ *      @Author: 随风
  */
 
 #ifndef MYCAN_H_

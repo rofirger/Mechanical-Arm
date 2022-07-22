@@ -2,6 +2,14 @@
  * @note: 部分库由 逐飞科技 提供！
  * */
 
+
+/*
+ *      @File: main.c
+ *
+ *      @Team: 删库跑路队
+ *      @Author: 随风
+ */
+
 #include "zf_common_headfile.h"
 #include "MyCan.h"
 #include "Config.h"
@@ -11,6 +19,10 @@
 #include "w25q128.h"
 #include "arm_kinematic.h"
 #include "menu.h"
+#include "msg_process.h"
+
+// 是否已初始化机械臂
+bool is_init = false;
 
 static uint16_t p_ms = 0;
 void Delay_Ms(uint32_t n)
@@ -123,8 +135,7 @@ void KeyInit()
     NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
     NVIC_Init(&NVIC_InitStructure);
 
-    // 关节状态查询定时器
-    pit_init_ms(TIM6_PIT, 1500);
+
 }
 
 void FiveKeyStatus()
@@ -267,6 +278,10 @@ void Init()
     // 串口初始化
     uart_init(UART_6, 115200, UART6_TX_C0, UART6_RX_C1);
     W25QXX_Init();
+    // 关节状态查询定时器
+    pit_init_ms(TIM6_PIT, 100);
+    // 计算
+    pit_init_ms(TIM8_PIT, 1000);
 }
 
 
@@ -310,10 +325,9 @@ void Config_Flash_SRAM(FLASH_SRAM_DEFIN SetFlashSRAM)
 }
 
 volatile bool is_open_wifi_uart = false;
-void SendMsgToUart()
+void SendMsgToUart(const char* _msg)
 {
-    static char msg[] = "hello";
-    uart_write_buffer(UART_6, msg, 6);
+    uart_write_buffer(UART_6, _msg, strlen(_msg));
 }
 
 int main(void)
@@ -343,8 +357,9 @@ int main(void)
         Blink(1000);
         if (is_open_wifi_uart)
         {
-            SendMsgToUart();
+            SendMsgToUart("HELLO");
         }
+        MainLoop();
     }
 }
 

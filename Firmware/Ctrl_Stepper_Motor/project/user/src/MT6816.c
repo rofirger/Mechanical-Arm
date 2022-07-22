@@ -1,8 +1,8 @@
 /*
- * ctrl_stepper_motor_init.c
+ *      @File: MT6816.h
  *
- *  Created on: 2022年4月19日
- *      Author: 随风
+ *      @Team: 删库跑路队
+ *      @Author: 随风
  */
 #include <MT6816.h>
 #include "zf_common_headfile.h"

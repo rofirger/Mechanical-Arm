@@ -1,3 +1,10 @@
+/*
+ *      @File: main.c
+ *
+ *      @Team: É¾¿âÅÜÂ·¶Ó
+ *      @Author: Ëæ·ç
+ */
+
 
 #include "zf_common_headfile.h"
 #include "dvp.h"
@@ -202,7 +209,6 @@ int main(void)
     }
     RGB565_Mode_Init();
     DVP_OV_Init();
-    tft180_show_string(0, 0, "hello!");
 
     uint8_t px;
     uint8_t pxbuf[30];
@@ -217,6 +223,7 @@ int main(void)
 
             SeekRed(red_line_pos, img_dvp[0], img_width, img_height, (uint8_t*)red_binary_dvp_img);
             int16_t ret = SeekRedLine((uint8_t*)red_binary_dvp_img, img_width, img_height);
+            Pos _ret_pos = FindRedPos((uint8_t*)red_binary_dvp_img, img_width, img_height);
             if (ret != 0)
             {
                 _ret_no_zero++;
@@ -228,9 +235,11 @@ int main(void)
                 {
                     _last_ret = _max_ret;
                 }
-                //Solve(_last_ret);
+                Solve(_last_ret);
             }
             tft180_show_int(0, 0, ret, 3);
+            tft180_show_int(0, 20, _ret_pos._x, 3);
+            tft180_show_int(50, 20, _ret_pos._y, 3);
             //tft180_show_rgb565_image(0, 0, img_dvp[0], img_width, img_height, img_width, img_height, 1);
             //ToGray();
             //SendImgToUart((uint8_t*)red_binary_dvp_img, img_width, img_height);

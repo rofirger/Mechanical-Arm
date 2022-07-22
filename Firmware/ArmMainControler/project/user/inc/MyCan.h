@@ -1,10 +1,9 @@
 /*
- * MyCan.h
+ *      @File: MyCan.h
  *
- *  Created on: 2022年5月14日
- *      Author: 随风
+ *      @Team: 删库跑路队
+ *      @Author: 随风
  */
-
 #ifndef MYCAN_H_
 #define MYCAN_H_
 void CAN_Mode_Init(uint8_t tsjw, uint8_t tbs2, uint8_t tbs1, uint16_t brp, uint8_t mode );

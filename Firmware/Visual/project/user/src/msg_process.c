@@ -1,8 +1,8 @@
 /*
- * msg_process.c
+ *      @File: msg_process.c
  *
- *  Created on: 2022年7月14日
- *      Author: 随风
+ *      @Team: 删库跑路队
+ *      @Author: 随风
  */
 #include "headfile.h"
 #include "zf_common_headfile.h"
@@ -36,9 +36,9 @@ void CAN_MsgProcess(char* _can_msg)
 void GetGoods()
 {
     //Delay_Ms(6000);
-    pwm_set_duty(TIM5_PWM_CH1_A0, 420);
-    Delay_Ms(2000);
-    //CAN_Send_Msg("PICK#", 5, MAIN_CONTROLER_FILTER_ID_A);
+    pwm_set_duty(TIM5_PWM_CH1_A0, 415);
+    Delay_Ms(6000);
+    CAN_Send_Msg("PICK#", 5, MAIN_CONTROLER_FILTER_ID_A);
 }
 
 void PutGoods()

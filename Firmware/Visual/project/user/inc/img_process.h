@@ -1,8 +1,8 @@
 /*
- * img_process.h
+ *      @File: img_process.h
  *
- *  Created on: 2022年7月1日
- *      Author: 随风
+ *      @Team: 删库跑路队
+ *      @Author: 随风
  */
 
 #ifndef IMG_PROCESS_H_
@@ -49,5 +49,5 @@ typedef struct RedLinePos
 
 uint8_t SeekRed(RedLinePos* _pos, uint16_t* _img, uint16_t _width, uint16_t _height, uint8_t* _binary_dvp_img);
 int16_t SeekRedLine(uint8_t* _red_binary_dvp_img, uint16_t _width, uint16_t _height);
-
+Pos FindRedPos(uint8_t* _red_binary_dvp_img, uint16_t _width, uint16_t _height);
 #endif /* IMG_PROCESS_H_ */

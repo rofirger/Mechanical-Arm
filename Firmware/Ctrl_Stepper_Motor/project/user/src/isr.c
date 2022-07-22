@@ -279,8 +279,8 @@ void TIM2_IRQHandler(void)
 {
     if(TIM_GetITStatus(TIM2, TIM_IT_Update) != RESET)
     {
+
        TIM_ClearITPendingBit(TIM2, TIM_IT_Update );
-       gpio_toggle_level(E2);
 
     }
 }
@@ -341,7 +341,7 @@ void TIM8_UP_IRQHandler(void)
     if(TIM_GetITStatus(TIM8, TIM_IT_Update) != RESET)
     {
         TIM_ClearITPendingBit(TIM8, TIM_IT_Update);
-
+        gpio_toggle_level(E2);
     }
 }
 

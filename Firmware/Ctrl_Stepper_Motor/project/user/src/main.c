@@ -1,9 +1,14 @@
 /*
  * @致谢：感谢逐飞科技ch32V307开源库的支持
 */
-
+/*
+ *      @File: main.c
+ *
+ *      @Team: 删库跑路队
+ *      @Author: 随风
+ */
 #include "Motor.h"
-#include "headfile.h".h"
+#include "headfile.h"
 #include "MyCan.h"
 #include "stdlib.h"
 #include "msg_process.h"
@@ -31,7 +36,7 @@ void Blink(uint16_t _times)
 void Init()
 {
     // 指示灯
-    gpio_init(INDICATOR, GPO, 0, GPO_PUSH_PULL);
+    gpio_init(INDICATOR, GPO, 1, GPO_PUSH_PULL);
     // 初始化步进电机驱动GPIO输出引脚
     gpio_init(AP_STEP, GPO, GPIO_LOW, GPO_PUSH_PULL);
     gpio_init(AN_STEP, GPO, GPIO_LOW, GPO_PUSH_PULL);
@@ -50,6 +55,9 @@ void Init()
     tft180_init();
     // CAN初始化
     CAN_Mode_Init( CAN_SJW_1tq, CAN_BS2_5tq, CAN_BS1_6tq, 12, CAN_Mode_Normal );
+    // 定时器中断
+    pit_init_ms(TIM8_PIT, 200);       // 指示灯
+    pit_init_us(TIM9_PIT, 1000 * 1000 * 1.0f / motor_fre);
 }
 
 

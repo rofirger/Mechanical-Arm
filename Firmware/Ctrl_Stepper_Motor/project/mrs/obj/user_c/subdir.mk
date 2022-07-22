@@ -9,7 +9,8 @@ D:/projects/mechanical_arm/Firmware/Ctrl_Stepper_Motor/project/user/src/Motor.c 
 D:/projects/mechanical_arm/Firmware/Ctrl_Stepper_Motor/project/user/src/MyCan.c \
 D:/projects/mechanical_arm/Firmware/Ctrl_Stepper_Motor/project/user/src/isr.c \
 D:/projects/mechanical_arm/Firmware/Ctrl_Stepper_Motor/project/user/src/main.c \
-D:/projects/mechanical_arm/Firmware/Ctrl_Stepper_Motor/project/user/src/msg_process.c 
+D:/projects/mechanical_arm/Firmware/Ctrl_Stepper_Motor/project/user/src/msg_process.c \
+D:/projects/mechanical_arm/Firmware/Ctrl_Stepper_Motor/project/user/src/my_pit.c 
 
 OBJS += \
 ./user_c/MT6816.o \
@@ -17,7 +18,8 @@ OBJS += \
 ./user_c/MyCan.o \
 ./user_c/isr.o \
 ./user_c/main.o \
-./user_c/msg_process.o 
+./user_c/msg_process.o \
+./user_c/my_pit.o 
 
 C_DEPS += \
 ./user_c/MT6816.d \
@@ -25,7 +27,8 @@ C_DEPS += \
 ./user_c/MyCan.d \
 ./user_c/isr.d \
 ./user_c/main.d \
-./user_c/msg_process.d 
+./user_c/msg_process.d \
+./user_c/my_pit.d 
 
 
 # Each subdirectory must supply rules for building sources it contributes
@@ -45,6 +48,9 @@ user_c/main.o: D:/projects/mechanical_arm/Firmware/Ctrl_Stepper_Motor/project/us
 	@	@	riscv-none-embed-gcc -march=rv32imac -mabi=ilp32 -msmall-data-limit=8 -mno-save-restore -O0 -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections -fno-common -pedantic -Wunused -Wuninitialized -Wall  -g -I"D:\projects\mechanical_arm\Firmware\Ctrl_Stepper_Motor\Libraries\doc" -I"D:\projects\mechanical_arm\Firmware\Ctrl_Stepper_Motor\libraries\sdk\Core" -I"D:\projects\mechanical_arm\Firmware\Ctrl_Stepper_Motor\libraries\sdk\Ld" -I"D:\projects\mechanical_arm\Firmware\Ctrl_Stepper_Motor\libraries\sdk\Peripheral" -I"D:\projects\mechanical_arm\Firmware\Ctrl_Stepper_Motor\libraries\sdk\Startup" -I"D:\projects\mechanical_arm\Firmware\Ctrl_Stepper_Motor\project\user\inc" -I"D:\projects\mechanical_arm\Firmware\Ctrl_Stepper_Motor\libraries\zf_common" -I"D:\projects\mechanical_arm\Firmware\Ctrl_Stepper_Motor\libraries\zf_device" -I"D:\projects\mechanical_arm\Firmware\Ctrl_Stepper_Motor\project\code" -I"D:\projects\mechanical_arm\Firmware\Ctrl_Stepper_Motor\libraries\zf_driver" -std=gnu99 -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@)" -c -o "$@" "$<"
 	@	@
 user_c/msg_process.o: D:/projects/mechanical_arm/Firmware/Ctrl_Stepper_Motor/project/user/src/msg_process.c
+	@	@	riscv-none-embed-gcc -march=rv32imac -mabi=ilp32 -msmall-data-limit=8 -mno-save-restore -O0 -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections -fno-common -pedantic -Wunused -Wuninitialized -Wall  -g -I"D:\projects\mechanical_arm\Firmware\Ctrl_Stepper_Motor\Libraries\doc" -I"D:\projects\mechanical_arm\Firmware\Ctrl_Stepper_Motor\libraries\sdk\Core" -I"D:\projects\mechanical_arm\Firmware\Ctrl_Stepper_Motor\libraries\sdk\Ld" -I"D:\projects\mechanical_arm\Firmware\Ctrl_Stepper_Motor\libraries\sdk\Peripheral" -I"D:\projects\mechanical_arm\Firmware\Ctrl_Stepper_Motor\libraries\sdk\Startup" -I"D:\projects\mechanical_arm\Firmware\Ctrl_Stepper_Motor\project\user\inc" -I"D:\projects\mechanical_arm\Firmware\Ctrl_Stepper_Motor\libraries\zf_common" -I"D:\projects\mechanical_arm\Firmware\Ctrl_Stepper_Motor\libraries\zf_device" -I"D:\projects\mechanical_arm\Firmware\Ctrl_Stepper_Motor\project\code" -I"D:\projects\mechanical_arm\Firmware\Ctrl_Stepper_Motor\libraries\zf_driver" -std=gnu99 -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@)" -c -o "$@" "$<"
+	@	@
+user_c/my_pit.o: D:/projects/mechanical_arm/Firmware/Ctrl_Stepper_Motor/project/user/src/my_pit.c
 	@	@	riscv-none-embed-gcc -march=rv32imac -mabi=ilp32 -msmall-data-limit=8 -mno-save-restore -O0 -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections -fno-common -pedantic -Wunused -Wuninitialized -Wall  -g -I"D:\projects\mechanical_arm\Firmware\Ctrl_Stepper_Motor\Libraries\doc" -I"D:\projects\mechanical_arm\Firmware\Ctrl_Stepper_Motor\libraries\sdk\Core" -I"D:\projects\mechanical_arm\Firmware\Ctrl_Stepper_Motor\libraries\sdk\Ld" -I"D:\projects\mechanical_arm\Firmware\Ctrl_Stepper_Motor\libraries\sdk\Peripheral" -I"D:\projects\mechanical_arm\Firmware\Ctrl_Stepper_Motor\libraries\sdk\Startup" -I"D:\projects\mechanical_arm\Firmware\Ctrl_Stepper_Motor\project\user\inc" -I"D:\projects\mechanical_arm\Firmware\Ctrl_Stepper_Motor\libraries\zf_common" -I"D:\projects\mechanical_arm\Firmware\Ctrl_Stepper_Motor\libraries\zf_device" -I"D:\projects\mechanical_arm\Firmware\Ctrl_Stepper_Motor\project\code" -I"D:\projects\mechanical_arm\Firmware\Ctrl_Stepper_Motor\libraries\zf_driver" -std=gnu99 -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@)" -c -o "$@" "$<"
 	@	@
 

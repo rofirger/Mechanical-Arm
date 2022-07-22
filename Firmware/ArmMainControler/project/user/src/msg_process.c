@@ -1,8 +1,8 @@
 /*
- * msg_process.c
+ *      @File: msg_process.c
  *
- *  Created on: Jun 30, 2022
- *      Author: 随风
+ *      @Team: 删库跑路队
+ *      @Author: 随风
  */
 
 /*
@@ -17,7 +17,9 @@
 #include "MyCan.h"
 
 extern float EulerPosNew[6];
-uint8_t* CAN_MSG[8];
+
+uint8_t CAN_MSG[8];
+RotingPos roting_pos;
 
 // 当前机械臂末端的欧拉位置, 前三个代表相对零点坐标，后三个代表相对原点X-Y-Z固定角旋转角
 extern float EulerPosNow[6];
@@ -28,6 +30,9 @@ extern float JointRotationNow[6];
 // 目标机械臂关节旋转角
 extern float JointRotationNew[6];
 extern bool is_open_wifi_uart;
+
+// 是否已经初始化机械臂
+extern bool is_init;
 
 // 物品放置位置
 float EulerPosGoods[3][6];
@@ -95,6 +100,12 @@ void ETH_MsgProcess(char* _eth_msg)
                 }
                 //tft180_show_float(0, _i * 16, JointRotationNew[_i], 4, 4);
             }
+        }
+        else if (strcmp(_main_msg, "GRAB") == 0)
+        {
+            UpdateRobotTransform(PREPARE_TRANSFORMING);
+            UpdateRobotTask(ROT_TO_TRUCKS);
+            SetTruckPos();
         }
     }
     char* _head_cmd = strtok(_main_msg, " ");
@@ -205,6 +216,37 @@ void CAN_MsgProcess(char* _can_msg)
         if (strcmp(_main_msg, "PICK") == 0)
         {
             //MoveToNewPos(EulerPosGoods[get_good_index]);
+            // BackRobot();
+            UpdateRobotTransform(PREPARE_TRANSFORMING);
+            UpdateRobotTask(ROT_TO_SHELF);
+            roting_pos._move_to_new_pos[0][0] = 252.3685;
+            roting_pos._move_to_new_pos[0][1] = 0;
+            roting_pos._move_to_new_pos[0][2] = 382.654;
+            roting_pos._move_to_new_pos[0][3] = -PI;
+            roting_pos._move_to_new_pos[0][4] = PI_2;
+            roting_pos._move_to_new_pos[0][5] = 0;
+
+            roting_pos._move_to_new_pos[1][0] = 0;
+            roting_pos._move_to_new_pos[1][1] = -252.368500;
+            roting_pos._move_to_new_pos[1][2] = 382.654114;
+            roting_pos._move_to_new_pos[1][3] = PI_2;
+            roting_pos._move_to_new_pos[1][4] = 0;
+            roting_pos._move_to_new_pos[1][5] = PI_2;
+
+//            roting_pos._move_to_new_pos[2][0] = EulerPosNew[0] + 20;
+//            roting_pos._move_to_new_pos[2][1] = EulerPosNew[1];
+//            roting_pos._move_to_new_pos[2][2] = EulerPosNew[2] - 10;
+//            roting_pos._move_to_new_pos[2][3] = EulerPosNew[3];
+//            roting_pos._move_to_new_pos[2][4] = EulerPosNew[4];
+//            roting_pos._move_to_new_pos[2][5] = EulerPosNew[5];
+
+            roting_pos._now_index = 0;
+            roting_pos._is_move_to_new_pos[0] = true;
+            roting_pos._is_move_to_new_pos[1] = true;
+            //roting_pos._is_move_to_new_pos[2] = true;
+            roting_pos._max_index = 2;
+
+            roting_pos._is_roting = true;
         }
     }
     char* _head_cmd = strtok(_main_msg, " ");
@@ -281,33 +323,31 @@ void CAN_MsgProcess(char* _can_msg)
                     }
                 }
             }
-            bool is_ok = true;
-            for (uint8_t i = 0; i < 6; ++i)
-            {
-                if (joint_status[i] != STAY_IN_POS)
-                    is_ok = false;
-            }
-//            if (joint_status[1] == STAY_IN_POS)
-//            {
-//                CAN_Send_Msg("SCAN#", 5, FILTER_ID_AXIS7_A >> 5);
-//                tft180_show_string(0, 100, "OK");
-//            }
         }
-//        else if (strcmp(_head_cmd, "PIC") == 0)
-//        {
-//            char* _sec_cmd = strtok(NULL, "#");
-//            get_good_index = _sec_cmd[0];
-//            CAN_Send_Msg("GET#", 5, FILTER_ID_AXIS7_A >> 5);
-//            float _new_pos[6];
-//            _new_pos[0] = EulerPosNew[0] + 20;
-//            _new_pos[1] = EulerPosNew[1];
-//            _new_pos[2] = EulerPosNew[2] - 10;
-//            _new_pos[3] = EulerPosNew[3];
-//            _new_pos[4] = EulerPosNew[4];
-//            _new_pos[5] = EulerPosNew[5];
-//            MoveToNewPos(_new_pos);
-//            tft180_show_int(0, 110, get_good_index, 3);
-//        }
+        else if (strcmp(_head_cmd, "PIC") == 0)
+        {
+            UpdateRobotTransform(PREPARE_TRANSFORMING);
+            UpdateRobotTask(GRAB_GOODS);
+            char* _sec_cmd = strtok(NULL, "#");
+            get_good_index = _sec_cmd[0];
+
+            roting_pos._move_to_new_pos[0][0] = EulerPosNew[0] + 20;
+            roting_pos._move_to_new_pos[0][1] = EulerPosNew[1];
+            roting_pos._move_to_new_pos[0][2] = EulerPosNew[2] - 10;
+            roting_pos._move_to_new_pos[0][3] = EulerPosNew[3];
+            roting_pos._move_to_new_pos[0][4] = EulerPosNew[4];
+            roting_pos._move_to_new_pos[0][5] = EulerPosNew[5];
+            roting_pos._now_index = 0;
+            roting_pos._is_move_to_new_pos[0] = true;
+//            for (uint8_t _i = 1; _i < 4; ++_i)
+//            {
+//                roting_pos._is_move_to_new_pos[_i] = false;
+//            }
+            roting_pos._max_index = 1;
+
+            roting_pos._is_roting = true;
+            tft180_show_int(0, 110, get_good_index, 3);
+        }
     }
 }
 
@@ -338,6 +378,9 @@ void InitGoodsInfo()
 
 void InitRobot(void)
 {
+    // 更新机械臂状态
+    UpdateRobotTask(NORMAL);
+    UpdateRobotStatus(STAY);
     CAN_Send_Msg("INIT#", 5, JOINT_GENERAL_ID >> 5);
     // 更新   JointRotationNew
     JointRotationNow[0] = 0;
@@ -347,6 +390,8 @@ void InitRobot(void)
     JointRotationNow[4] = 0;
     JointRotationNow[5] = 0;
     InitGoodsInfo();
+    InitRotingPos();
+    is_init = true;
 }
 
 void BackRobot(void)
@@ -372,9 +417,71 @@ void CloseUart()
 void QueryJointStatus()
 {
     static char _send_joint_to_angle[] = "STATUS#";
-    for (uint8_t _i = 0; _i < 6; ++_i)
+    static int _i = 0;
+    CAN_Send_Msg(_send_joint_to_angle, 7, ((JOINT_ID_BASE + JOINT_ID_OFFSET * _i) >> 5));
+    _i++;
+    if (_i >= 6)
+        _i = 0;
+}
+
+// 初始化运动临时点
+void InitRotingPos()
+{
+    roting_pos._is_roting = false;
+    roting_pos._now_index = 0;
+    roting_pos._max_index = 0;
+    for (uint8_t _i = 0; _i < 10; ++_i)
     {
-        CAN_Send_Msg(_send_joint_to_angle, 7, ((JOINT_ID_BASE + JOINT_ID_OFFSET * _i) >> 5));
-        Delay_Ms(10);
+        roting_pos._is_move_to_new_pos[_i] = false;
+        memset(roting_pos._move_to_new_pos[_i], 0, sizeof(float) * 6);
+    }
+}
+extern bool is_read_to_release;
+// main函数循环
+void MainLoop()
+{
+    if (GetRobotStatus() == ROTING)
+    {
+        if (joint_status[0] == STAY_IN_POS &&
+            joint_status[1] == STAY_IN_POS &&
+            joint_status[2] == STAY_IN_POS &&
+            joint_status[3] == STAY_IN_POS &&
+            joint_status[4] == STAY_IN_POS &&
+            joint_status[5] == STAY_IN_POS)
+        {
+            if (GetRobotTransform() == TRANSFORMING)
+            {
+                UpdateRobotTransform(TRANSFORMED);
+                UpdateRobotStatus(STAY);
+                if (is_read_to_release)
+                {
+                    CAN_Send_Msg("PUT#", 5, FILTER_ID_AXIS7_A >> 5);
+                    Delay_Ms(3000);
+                    BackRobot();
+                }
+            }
+        }
+        else
+        {
+            if (GetRobotTransform() == PREPARE_TRANSFORMING)
+            {
+                UpdateRobotTransform(TRANSFORMING);
+            }
+        }
+    }
+
+    if (GetRobotTask() == ROT_TO_TRUCKS && GetRobotStatus() == STAY && GetRobotTransform() == TRANSFORMED)
+    {
+        roting_pos._is_roting = false;
+        roting_pos._max_index = 0;
+        roting_pos._now_index = 0;
+        CAN_Send_Msg("SCAN#", 5, FILTER_ID_AXIS7_A >> 5);
+    }
+    if (GetRobotTask() == GRAB_GOODS && GetRobotStatus() == STAY && GetRobotTransform() == TRANSFORMED)
+    {
+        roting_pos._is_roting = false;
+        roting_pos._max_index = 0;
+        roting_pos._now_index = 0;
+        CAN_Send_Msg("GET#", 5, FILTER_ID_AXIS7_A >> 5);
     }
 }

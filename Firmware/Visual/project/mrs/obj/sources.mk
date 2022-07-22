@@ -25,7 +25,6 @@ SUBDIRS := \
 sdk/Core \
 sdk/Peripheral \
 sdk/Startup \
-soft_compoment \
 user_c \
 zf_common \
 zf_device \

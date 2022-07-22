@@ -30,7 +30,13 @@ user_c/joint.o: \
  D:\projects\mechanical_arm\Firmware\ArmMainControler\project\user\inc/arm_kinematic.h \
  D:\projects\mechanical_arm\Firmware\ArmMainControler\project\user\inc/headfile.h \
  D:\projects\mechanical_arm\Firmware\ArmMainControler\project\user\inc/joint.h \
- D:\projects\mechanical_arm\Firmware\ArmMainControler\project\user\inc/arm_kinematic.h
+ D:\projects\mechanical_arm\Firmware\ArmMainControler\project\user\inc/arm_kinematic.h \
+ D:\projects\mechanical_arm\Firmware\ArmMainControler\project\user\inc/msg_process.h \
+ D:\projects\mechanical_arm\Firmware\ArmMainControler\project\user\inc/MyCan.h \
+ D:\projects\mechanical_arm\Firmware\ArmMainControler\project\user\inc/Config.h \
+ D:\projects\mechanical_arm\Firmware\ArmMainControler\NetLib/WCHNET.h \
+ D:\projects\mechanical_arm\Firmware\ArmMainControler\libraries\sdk\Peripheral/ch32v30x_eth.h \
+ D:\projects\mechanical_arm\Firmware\ArmMainControler\project\user\inc/ETH.h
 
 D:\projects\mechanical_arm\Firmware\ArmMainControler\project\user\inc/headfile.h:
 
@@ -93,3 +99,15 @@ D:\projects\mechanical_arm\Firmware\ArmMainControler\project\user\inc/headfile.h
 D:\projects\mechanical_arm\Firmware\ArmMainControler\project\user\inc/joint.h:
 
 D:\projects\mechanical_arm\Firmware\ArmMainControler\project\user\inc/arm_kinematic.h:
+
+D:\projects\mechanical_arm\Firmware\ArmMainControler\project\user\inc/msg_process.h:
+
+D:\projects\mechanical_arm\Firmware\ArmMainControler\project\user\inc/MyCan.h:
+
+D:\projects\mechanical_arm\Firmware\ArmMainControler\project\user\inc/Config.h:
+
+D:\projects\mechanical_arm\Firmware\ArmMainControler\NetLib/WCHNET.h:
+
+D:\projects\mechanical_arm\Firmware\ArmMainControler\libraries\sdk\Peripheral/ch32v30x_eth.h:
+
+D:\projects\mechanical_arm\Firmware\ArmMainControler\project\user\inc/ETH.h:

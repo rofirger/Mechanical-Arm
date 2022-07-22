@@ -1,8 +1,8 @@
 /*
- * arm_kinematic.h
+ *      @File: arm_kinematic.h
  *
- *  Created on: Jun 21, 2022
- *      Author: 随风
+ *      @Team: 删库跑路队
+ *      @Author: 随风
  */
 
 #ifndef ARM_KINEMATIC_H_

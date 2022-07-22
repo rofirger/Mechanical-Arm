@@ -1,8 +1,8 @@
 /*
- * Motor.h
+ *      @File: Motor.h
  *
- *  Created on: 2022年4月21日
- *      Author: 随风
+ *      @Team: 删库跑路队
+ *      @Author: 随风
  */
 
 #ifndef MOTOR_H_
@@ -71,13 +71,13 @@
 #endif
 
 #if (AXIS2 == 1)
-#define INIT_POS_ANGLE          141
-#define BALANCE_POS_ANGLE       74
+#define INIT_POS_ANGLE          179
+#define BALANCE_POS_ANGLE       112
 #endif
 
 #if (AXIS3 == 1)
-#define INIT_POS_ANGLE          46
-#define BALANCE_POS_ANGLE       96
+#define INIT_POS_ANGLE          277
+#define BALANCE_POS_ANGLE       297
 #endif
 
 #if (AXIS4 == 1)
@@ -94,6 +94,9 @@
 #define INIT_POS_ANGLE          68
 #define BALANCE_POS_ANGLE       68
 #endif
+
+// 步进电机频率
+extern uint32_t motor_fre;
 
 typedef struct JointRotationPos
 {

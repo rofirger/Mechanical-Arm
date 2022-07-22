@@ -1,8 +1,8 @@
 /*
- * arm_kinematic.c
+ *      @File: arm_kinematatic.c
  *
- *  Created on: Jun 21, 2022
- *      Author: 随风
+ *      @Team: 删库跑路队
+ *      @Author: 随风
  */
 
 /*
@@ -20,6 +20,8 @@
 #include "math.h"
 #include "WCHNET.h"
 #include "MyCan.h"
+#include "stdlib.h"
+#include "msg_process.h"
 
 // 连杆参数表
 float link_parameter[6][4] = {
@@ -52,7 +54,8 @@ extern float JointRotationNow[6];
 extern float JointRotationNew[6];
 // 逆解集合
 IK_AngleSolve IK_Angles;
-
+// 机械臂运动过程临时点
+extern RotingPos roting_pos;
 /*
  * @brief:角度换算弧度
  */
@@ -954,7 +957,8 @@ void MoveToNewPos(const float* _euler_pos)
         {
             memset(_send_joint_to_angle, 0, 8);
             memcpy(_send_joint_to_angle, "TO ", 3);
-            itoa(JointRotationNew[_i] * SPEED_RATIO, &_send_joint_to_angle[3], 10);
+            int _tmp = JointRotationNew[_i] * SPEED_RATIO;
+            itoa(_tmp, &_send_joint_to_angle[3], 10);
             uint8_t _size = strlen(_send_joint_to_angle);
             _send_joint_to_angle[_size++] = '#';
             CAN_Send_Msg(_send_joint_to_angle, _size, ((JOINT_ID_BASE + JOINT_ID_OFFSET * _i) >> 5));

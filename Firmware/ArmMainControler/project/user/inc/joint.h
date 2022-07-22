@@ -67,9 +67,44 @@ typedef enum JointStatus
     STAY_IN_POS
 }JointStatus;
 
+typedef enum RobotStatus
+{
+    ROTING,
+    STAY
+}RobotStatus;
+
+typedef enum RobotTransform
+{
+    PREPARE_TRANSFORMING,
+    TRANSFORMING,
+    TRANSFORMED
+}RobotTransform;
+
+// 任务
+typedef enum RobotTask
+{
+    NORMAL,
+    ROT_TO_TRUCKS,      // 移动到货车
+    FIND_GOODS,         // 寻找货物
+    GRAB_GOODS,         // 抓取货物
+    ROT_TO_SHELF,        // 移动到货架
+    ABANDON_GOODS,        // 释放货物
+    BACK_AVAILABLE,       // 返回到四臂可正常旋转的位置
+    BACK_INIT_POS         // 返回原始位置
+}RobotTask;
+
+
+
+
 extern JointStatus joint_status[6];
 
 void InitRobot(void);
 void BackRobot(void);
-
+void UpdateRobotTask(RobotTask _robot_task);
+RobotTask GetRobotTask();
+void UpdateRobotStatus(RobotStatus _robot_status);
+RobotStatus GetRobotStatus();
+void UpdateRobotTransform(RobotTransform _transform_status);
+RobotTransform GetRobotTransform();
+void SetTruckPos();
 #endif /* JOINT_H_ */

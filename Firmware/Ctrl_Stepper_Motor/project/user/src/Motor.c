@@ -1,8 +1,8 @@
 /*
- * Motor.c
+ *      @File: Motor.c
  *
- *  Created on: 2022年4月21日
- *      Author: 随风
+ *      @Team: 删库跑路队
+ *      @Author: 随风
  */
 
 
@@ -12,6 +12,32 @@
 #include "stdlib.h"
 #include "MyCan.h"
 #include "math.h"
+
+/* 定义步进电机频率 */
+#if (AXIS1 == 1)
+uint32_t motor_fre = 1000;
+#endif
+
+#if (AXIS2 == 1)
+uint32_t motor_fre = 1000;
+#endif
+
+#if (AXIS3 == 1)
+uint32_t motor_fre = 1000;
+#endif
+
+#if (AXIS4 == 1)
+uint32_t motor_fre = 1000;
+#endif
+
+#if (AXIS5 == 1)
+uint32_t motor_fre = 1000;
+#endif
+
+#if (AXIS6 == 1)
+uint32_t motor_fre = 1000;
+#endif
+
 
 extern bool is_stop;
 extern bool is_start;
@@ -39,7 +65,7 @@ void CV_MotorStep(uint16_t _times, uint16_t _ms_interval)
         _motor_status = (_motor_status >> 1) | ((_motor_status & 0x01) << 3);
         MT6816_ReadAngle(&_data);
         float _new_pos = _data._decode_angle;
-#if (AXIS6 == 0)
+#if (AXIS6 == 0 && AXIS2 == 0)
         if (_new_pos - joint_rotation_pos._now_pos < -300)
         {
             joint_rotation_pos._now_offset_balance += (_new_pos - joint_rotation_pos._now_pos) + 360;
@@ -48,13 +74,6 @@ void CV_MotorStep(uint16_t _times, uint16_t _ms_interval)
         {
             joint_rotation_pos._now_offset_balance += (_new_pos - joint_rotation_pos._now_pos);
         }
-#if (AXIS2 == 1)
-        if (joint_rotation_pos._now_offset_balance < -85 * SPEED_RATIO)
-            _ms_interval = 180;
-        else {
-            _ms_interval = 48;
-        }
-#endif
 #else
         if (_new_pos - joint_rotation_pos._now_pos > 300)
         {
@@ -88,7 +107,7 @@ void CCV_MotorStep(uint16_t _times, uint16_t _ms_interval)
         _motor_status = (_motor_status >> 1) | ((_motor_status & 0x01) << 3);
         MT6816_ReadAngle(&_data);
         float _new_pos = _data._decode_angle;
-#if (AXIS6 == 0)
+#if (AXIS6 == 0 && AXIS2 == 0)
         if (_new_pos - joint_rotation_pos._now_pos > 300)
         {
             joint_rotation_pos._now_offset_balance += (_new_pos - (joint_rotation_pos._now_pos + 360));
@@ -97,13 +116,6 @@ void CCV_MotorStep(uint16_t _times, uint16_t _ms_interval)
         {
             joint_rotation_pos._now_offset_balance += (_new_pos - joint_rotation_pos._now_pos);
         }
-#if (AXIS2 == 1)
-        if (joint_rotation_pos._now_offset_balance < -85 * SPEED_RATIO)
-            _ms_interval = 180;
-        else {
-            _ms_interval = 48;
-        }
-#endif
 #else
         if (_new_pos - joint_rotation_pos._now_pos < -300)
         {
@@ -158,11 +170,31 @@ float PID_Pos(PosErr* sptr, PID* pid, float now_point, float target_point)
     return pos_;
 }
 
+/*<!
+ *  @brief      增量式PID
+ *  *sptr ：误差参数
+ *  *pid:  PID参数
+ *  nowPoint：实际值
+ *  targetPoint：   期望值
+ */
+// 增量式PID电机控制
+float PID_Increase (Error *sptr, PID *pid, float nowPoint, float targetPoint)
+{
+    float increase;                                                                          //最后得出的实际增量
+    sptr->currentError = targetPoint - nowPoint;                                             // 计算当前误差
+    increase = pid->P * (sptr->currentError - sptr->lastError)                               //比例P
+    + pid->I * sptr->currentError                                                 //积分I
+    + pid->D * (sptr->currentError - 2 * sptr->lastError + sptr->previoursError); //微分D
+    sptr->previoursError = sptr->lastError;                                                  // 更新前次误差
+    sptr->lastError = sptr->currentError;                                                    // 更新上次误差
+    return increase;                                                                         // 返回增量
+}
+
 void KeepPos()
 {
     static MT6816_Structure _data;
     static PosErr _pid_err = { {0, 0, 0}, 0 };
-    static PID _pid = { 0.53, 0, 0.0002 };
+    static PID _pid = { 0.5555556, 0, 0 };
     MT6816_ReadAngle(&_data);
     float _new_pos = _data._decode_angle;
     joint_rotation_pos._now_offset_balance += (_new_pos - joint_rotation_pos._now_pos);
@@ -187,15 +219,15 @@ void KeepPos()
 #if (AXIS2 == 1)
             SendBackChangeEncoder(INCREASE_ENCODER, _ccw_incr);
             if (joint_rotation_pos._now_offset_balance < -90 * SPEED_RATIO)
-                CV_MotorStep(_ccw_incr, 80);
+                CCV_MotorStep(_ccw_incr, 25);
             else
-                CV_MotorStep(_ccw_incr, 48);
+                CCV_MotorStep(_ccw_incr, 25);
 #elif (AXIS5 == 1 || AXIS4 == 1)
             SendBackChangeEncoder(INCREASE_ENCODER, _ccw_incr);
-            CV_MotorStep(_ccw_incr, 20);
+            CV_MotorStep(_ccw_incr, 25);
 #elif (AXIS1 == 1 || AXIS3 == 1)
             SendBackChangeEncoder(INCREASE_ENCODER, _ccw_incr);
-            CV_MotorStep(_ccw_incr, 30);
+            CV_MotorStep(_ccw_incr, 25);
 #endif
 #else
             SendBackChangeEncoder(INCREASE_ENCODER, _ccw_incr);
@@ -209,16 +241,16 @@ void KeepPos()
 #if (AXIS2 == 1)
             SendBackChangeEncoder(DECREASE_ENCODER, -_ccw_incr);
             if (joint_rotation_pos._now_offset_balance < -90 * SPEED_RATIO)
-                CCV_MotorStep(-_ccw_incr, 80);
+                CV_MotorStep(-_ccw_incr, 25);
             else {
-                CCV_MotorStep(-_ccw_incr, 48);
+                CV_MotorStep(-_ccw_incr, 25);
             }
 #elif (AXIS5 == 1 || AXIS4 == 1)
             SendBackChangeEncoder(DECREASE_ENCODER, -_ccw_incr);
-            CCV_MotorStep(-_ccw_incr, 20);
+            CCV_MotorStep(-_ccw_incr, 25);
 #elif (AXIS1 == 1 || AXIS3 == 1)
             SendBackChangeEncoder(DECREASE_ENCODER, -_ccw_incr);
-            CCV_MotorStep(-_ccw_incr, 30);
+            CCV_MotorStep(-_ccw_incr, 25);
 #endif
 #else
             SendBackChangeEncoder(DECREASE_ENCODER, -_ccw_incr);
@@ -253,8 +285,8 @@ void InitPos()
 #endif
 
 #if (AXIS3 == 1)
-    if (joint_rotation_pos._now_pos > 200)
-        joint_rotation_pos._now_offset_balance = -(BALANCE_POS_ANGLE + 360 - joint_rotation_pos._now_pos);
+    if (joint_rotation_pos._now_pos > 150)
+        joint_rotation_pos._now_offset_balance = -(BALANCE_POS_ANGLE - joint_rotation_pos._now_pos);
     else
         joint_rotation_pos._now_offset_balance = -(BALANCE_POS_ANGLE - joint_rotation_pos._now_pos);
     joint_rotation_pos._init_pos_offset_balance = -(BALANCE_POS_ANGLE - INIT_POS_ANGLE);
